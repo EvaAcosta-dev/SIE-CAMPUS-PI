@@ -8,8 +8,10 @@ import java.awt.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.integrador.campus.Util.Permisos;
 import com.integrador.campus.view.Modulo.UsuarioPanel;
 import com.integrador.campus.view.Modulo.CursoMateriaPanel;
+
 
 public class DashboardFrame extends JFrame {
     private final Color azulOscuro = new Color(25, 45, 80);
@@ -26,8 +28,12 @@ public class DashboardFrame extends JFrame {
     //instancia de los paneles de módulos
     private final UsuarioPanel usuarioPanel = new UsuarioPanel();
     private final CursoMateriaPanel cursosMateriasPanel = new CursoMateriaPanel();
+    private final Map<String, Component> espacios = new LinkedHashMap<>();
+    private final String rol;
 
     public DashboardFrame(String nombreUsuario, String rol) {
+        this.rol = rol;
+        
         setTitle("Campus | Panel principal");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1200, 760);
@@ -157,22 +163,25 @@ public class DashboardFrame extends JFrame {
         return menu;
     }
 
-    private void agregarOpcion(JPanel menu, String nombre) {
+        private void agregarOpcion(JPanel menu, String nombre) {
         JButton boton = crearBotonMenu(nombre);
 
         boton.addActionListener(e -> {
-            if ("Inicio".equals(nombre)) {
+                if ("Inicio".equals(nombre)) {
                 lblTitulo.setText("Panel principal");
                 mostrarInicio();
-            } else {
+                } else {
                 mostrarModulo(nombre);
-            }
+                }
         });
+
+        Component espacio = Box.createVerticalStrut(5);
+        espacios.put(nombre, espacio);
 
         botonesMenu.put(nombre, boton);
         menu.add(boton);
-        menu.add(Box.createVerticalStrut(5));
-    }
+        menu.add(espacio);
+        }
 
     private JButton crearBotonMenu(String nombre) {
         JButton boton = new JButton(nombre);
@@ -315,6 +324,15 @@ public class DashboardFrame extends JFrame {
     }
 
     private void mostrarModulo(String nombre) {
+        
+        // Segunda barrera, por si alguien llega sin pasar por el botón
+        if (!Permisos.puedeAcceder(rol, nombre)) {
+            JOptionPane.showMessageDialog(this,
+                    "No tienes permiso para acceder a este módulo.",
+                    "Acceso denegado", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
         lblTitulo.setText(nombre);
         contenido.removeAll();
 
@@ -336,9 +354,11 @@ public class DashboardFrame extends JFrame {
 
 
     private void aplicarPermisosVisuales(String rol) {
-        // Ajustaremos la visibilidad de las opciones según
-        // los roles reales de Campus. Ocultar botones no
-        // sustituye la autorización en la lógica del sistema.
+        for (Map.Entry<String, JButton> entrada : botonesMenu.entrySet()) {
+            boolean permitido = Permisos.puedeAcceder(rol, entrada.getKey());
+            entrada.getValue().setVisible(permitido);
+            espacios.get(entrada.getKey()).setVisible(permitido);
+        }
     }
 
     private String escapar(String texto) {

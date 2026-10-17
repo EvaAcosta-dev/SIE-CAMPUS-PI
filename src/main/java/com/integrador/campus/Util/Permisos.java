@@ -22,7 +22,7 @@ public class Permisos {
         ),
 
         "DOCENTE", Set.of(
-            "Inicio", "Estudiantes", "Notas", "Asistencia",
+            "Inicio", "Estudiantes", "Notas", "Boletines", "Asistencia",
             "Convivencia", "Notificaciones"
         ),
 

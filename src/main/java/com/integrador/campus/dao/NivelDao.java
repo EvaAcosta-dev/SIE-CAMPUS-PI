@@ -12,11 +12,11 @@ import com.integrador.campus.model.Nivel;
 public class NivelDao {
 public boolean registrarNivel(Nivel nivel) {
         // Implementar la lógica para registrar un nivel en la base de datos
-        String sql = "INSERT INTO nivel (id_nivel, nombre_nivel) VALUES (?, ?)";
+        String sql = "INSERT INTO nivel (nombre_nivel) VALUES (?)";
         try (Connection con = BDConexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setInt(1, nivel.getIdNivel());
-            ps.setString(2, nivel.getNombreNivel());
+            //ps.setInt(1, nivel.getIdNivel());
+            ps.setString(1, nivel.getNombreNivel());
             ps.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Error al registrar nivel: " + e.getMessage());

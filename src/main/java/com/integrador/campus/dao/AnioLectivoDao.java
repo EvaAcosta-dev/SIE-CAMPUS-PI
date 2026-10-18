@@ -27,7 +27,7 @@ public class AnioLectivoDao {
     
     // Registrar año escolar
     public boolean registrarAnioLectivo(AnioLectivo anioLectivo){
-        String sql ="INSERT INTO anio_lectivo (id_anio,anio,fecha_inicio,fecha_fin,estado) VALUES (?,?,?,?,?)";
+        String sql ="INSERT INTO anio_lectivo (id_anio,anio,fecha_inicio,fecha_fin,estado) VALUES (?,?,?,?)";
         try(Connection con = BDConexion.getConexion();
             PreparedStatement ps = con.prepareStatement(sql)){  
             ps.setInt(1,anioLectivo.getIdAnio());
@@ -122,7 +122,7 @@ public class AnioLectivoDao {
 
         String sql =
             "UPDATE anio_lectivo SET estado = ? "
-            + "WHERE id_estado = ?";
+            + "WHERE id_anio = ?";
 
         try (Connection con = BDConexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {

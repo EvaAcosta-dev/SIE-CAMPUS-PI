@@ -48,7 +48,7 @@ public class CursoFormPanel extends JPanel {
         panelFormulario.setLayout(new BoxLayout(panelFormulario, BoxLayout.Y_AXIS));
         panelFormulario.setBackground(Color.WHITE);
         panelFormulario.setBorder(new EmptyBorder(20, 20, 20, 20));
-        panelFormulario.setPreferredSize(new Dimension(320, 600));
+        panelFormulario.setPreferredSize(new Dimension(300, 600));
 
         JLabel lblTitulo = new JLabel("Gestión de Cursos");
         lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 20));

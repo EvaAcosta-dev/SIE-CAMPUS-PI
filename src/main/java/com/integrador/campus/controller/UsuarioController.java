@@ -65,7 +65,13 @@ public class UsuarioController {
     private void cargarUsuarios() {
         try {
             List<Usuario> usuarios = dao.listaUsuario();
-            vista.mostrarUsuarios(usuarios);
+            
+            if (usuarios.isEmpty()) {
+                vista.mostrarUsuarios(usuarios); // Limpia la tabla visualmente
+                vista.mostrarMensaje("No hay usuarios registrados en el sistema actualmente.");
+            } else {
+                vista.mostrarUsuarios(usuarios);
+            }
         } catch (Exception e) {
             vista.mostrarError(
                     "No fue posible cargar los usuarios: " + e.getMessage()
@@ -247,9 +253,8 @@ public class UsuarioController {
             vista.mostrarUsuarios(usuarios);
 
             if (usuarios.isEmpty()) {
-                vista.mostrarMensaje(
-                        "No se encontraron usuarios con ese criterio."
-                );
+                vista.mostrarMensaje("No se encontraron usuarios con ese criterio.");
+                cargarUsuarios();
             }
 
         } catch (SQLException e) {
@@ -300,7 +305,7 @@ public class UsuarioController {
     // Valida los datos obligatorios.
     private boolean validarFormulario() {
 
-        if (vista.getNombre().trim().isEmpty() || vista.getApellido().trim().isEmpty() || vista.getCorreo().trim().isEmpty()) {
+        if (vista.getNombre().trim().isEmpty() || vista.getApellido().trim().isEmpty() || vista.getCorreo().trim().isEmpty()||vista.getContrasena().trim().isEmpty()) {
             vista.mostrarError("Todos los campos del usuario son obligatorios.");
             return false;
         }

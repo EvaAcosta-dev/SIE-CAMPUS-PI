@@ -13,12 +13,12 @@ import java.sql.SQLException;
 public class GradoDao {
     //metodo para registrar un grado
     public boolean registrarGrado(Grado grado) {
-        String sql = "INSERT INTO grado (id_grado,numero_grado, nombre_visible,id_nivel) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO grado (numero_grado, nombre_visible,id_nivel) VALUES (?,?,?)";
         try (Connection con = BDConexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setInt(1, grado.getIdGrado());
-            ps.setInt(2, grado.getNumeroGrado());
-            ps.setString(3, grado.getNombreVisible());
+            //ps.setInt(1, grado.getIdGrado());
+            ps.setInt(1, grado.getNumeroGrado());
+            ps.setString(2, grado.getNombreVisible());
             ps.setInt(4, grado.getIdNivel());
             ps.executeUpdate();
             return true; // Retornar true si el registro fue exitoso
@@ -60,12 +60,12 @@ public class GradoDao {
     //metodo para buscar un grado 
     public List<Grado> listaGrados() {
     List<Grado> grados = new ArrayList<>();
-    String sql="SELECT g.id_grado,g.nombre_visible,g.numero_grado,n.nombre_nivel"
-        + "FROM grado g"
-        +" INNER JOIN nivel n ON g.id_nivel=n.id_nivel"
-        +"WHERE g.numero_grado LIKE ?"
-        +"OR g.nombre_visible LIKE ?"
-        +"OR n.nombre_nivel LIKE ?";
+    String sql=" SELECT g.id_grado,g.nombre_visible,g.numero_grado,n.nombre_nivel "
+        + " FROM grado g "
+        +" INNER JOIN nivel n ON g.id_nivel=n.id_nivel "
+        +" WHERE g.numero_grado LIKE ?"
+        +" OR g.nombre_visible LIKE ? "
+        +" OR n.nombre_nivel LIKE ? ";
         try (Connection con = BDConexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {

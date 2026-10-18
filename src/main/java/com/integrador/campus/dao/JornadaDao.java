@@ -12,11 +12,10 @@ import com.integrador.campus.model.Jornada;
 public class JornadaDao {
     //metodo para registrar una jornada
     public boolean registrarJornada(Jornada jornada) {
-        String sql = "INSERT INTO jornada (id_jornada, nombre_jornada) VALUES (?, ?)";
+        String sql = "INSERT INTO jornada (nombre_jornada) VALUES (?)";
         try (Connection con = BDConexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setInt(1, jornada.getIdJornada());
-            ps.setString(2, jornada.getNombreJornada());
+            ps.setString(1, jornada.getNombreJornada());
             ps.executeUpdate();
             return true; // Retornar true si el registro fue exitoso
         } catch (SQLException e) {

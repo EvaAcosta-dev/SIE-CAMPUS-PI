@@ -20,19 +20,19 @@ import javax.swing.JOptionPane;
 
 public class CursoDao {
     //metodo para el registro de los cursos
-     public boolean registrarCursosQuery(Cursos c) {
+     public boolean registrarCursosQuery(Cursos cursos) {
         String sql = "INSERT INTO curso(nombre_Curso, id_grado, id_anio, id_docente_director, id_jornada) VALUES (?,?,?,?,?)";
      try(Connection con = BDConexion.getConexion();
         PreparedStatement ps = con.prepareStatement(sql)){
-            ps.setString(1, c.getNombreCurso());
-            ps.setInt(2, c.getIdGrado());
-            ps.setInt(3, c.getIdAnio());
-            if (c.getIdDocenteDirector() != null) {
-                ps.setInt(4, c.getIdDocenteDirector());
+            ps.setString(1, cursos.getNombreCurso());
+            ps.setInt(2, cursos.getIdGrado());
+            ps.setInt(3, cursos.getIdAnio());
+            if (cursos.getIdDocenteDirector() != null) {
+                ps.setInt(4, cursos.getIdDocenteDirector());
             } else {
                 ps.setNull(4, Types.INTEGER);
             }
-            ps.setInt(5, c.getIdJornada());
+            ps.setInt(5, cursos.getIdJornada());
             ps.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -41,20 +41,20 @@ public class CursoDao {
         }
     }
 //metodo para actualizar los cursos
-    public boolean actualizarCursosQuery(Cursos c) {
+    public boolean actualizarCursosQuery(Cursos cursos) {
         String sql = "UPDATE curso SET nombre_Curso=?, id_grado=?, id_anio=?, id_docente_director=?, id_jornada=? WHERE id_curso=?";
         try (Connection con = BDConexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, c.getNombreCurso());
-            ps.setInt(2, c.getIdGrado());
-            ps.setInt(3, c.getIdAnio());
-            if (c.getIdDocenteDirector() != null) {
-                ps.setInt(4, c.getIdDocenteDirector());
+            ps.setString(1, cursos.getNombreCurso());
+            ps.setInt(2, cursos.getIdGrado());
+            ps.setInt(3, cursos.getIdAnio());
+            if (cursos.getIdDocenteDirector() != null) {
+                ps.setInt(4, cursos.getIdDocenteDirector());
             } else {
                 ps.setNull(4, Types.INTEGER);
             }
-            ps.setInt(5, c.getIdJornada());
-            ps.setInt(6, c.getIdCurso());
+            ps.setInt(5, cursos.getIdJornada());
+            ps.setInt(6, cursos.getIdCurso());
             ps.executeUpdate(); // Ejecutar UPDATE
             return true;
         } catch (SQLException e) {
@@ -76,21 +76,21 @@ public class CursoDao {
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                Cursos c = new Cursos();
-                c.setIdCurso(rs.getInt("id_curso"));
-                c.setNombreCurso(rs.getString("nombre_Curso"));
-                c.setIdGrado(rs.getInt("id_grado"));
-                c.setIdAnio(rs.getInt("id_anio"));
+                Cursos curso = new Cursos();
+                curso.setIdCurso(rs.getInt("id_curso"));
+                curso.setNombreCurso(rs.getString("nombre_Curso"));
+                curso.setIdGrado(rs.getInt("id_grado"));
+                curso.setIdAnio(rs.getInt("id_anio"));
                 if (rs.getObject("id_docente_director") != null) {
-                    c.setIdDocenteDirector(rs.getInt("id_docente_director"));
+                    curso.setIdDocenteDirector(rs.getInt("id_docente_director"));
                 }
-                c.setIdJornada(rs.getInt("id_jornada"));
-                c.setNombreGrado(rs.getString("nombre_grado"));
-                c.setNombreJornada(rs.getString("nombre_jornada"));
+                curso.setIdJornada(rs.getInt("id_jornada"));
+                curso.setNombreGrado(rs.getString("nombre_grado"));
+                curso.setNombreJornada(rs.getString("nombre_jornada"));
                 if (rs.getObject("anio_lectivo") != null) {
-                    c.setAnio(rs.getInt("anio_lectivo"));
+                    curso.setAnio(rs.getInt("anio_lectivo"));
                 }
-                cursos.add(c);
+                cursos.add(curso);
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error al listar cursos: " + e);

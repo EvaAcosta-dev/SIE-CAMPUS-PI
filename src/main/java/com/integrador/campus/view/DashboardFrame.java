@@ -142,8 +142,10 @@ public class DashboardFrame extends JFrame {
 
             if (respuesta == JOptionPane.YES_OPTION) {
                 dispose();
-                // Aquí se abrirá el LoginFrame al integrar
-                // el flujo de autenticación.
+                // Aquí se reabrirá el Login luego de cerrar sesion
+                 LoginFrame loginFrame = new LoginFrame();
+                  loginFrame.setVisible(true);
+
             }
         });
 
@@ -325,6 +327,9 @@ public class DashboardFrame extends JFrame {
             case "Cursos y materias":
                 contenido.add(cursosMateriasPanel, BorderLayout.CENTER);
                 break;
+                /*case "Academico":
+                        contenido.add(academicoPanel,BorderLayout.CENTER);
+                break; */
             default:
                 mostrarInicio();
                 return;
@@ -336,9 +341,7 @@ public class DashboardFrame extends JFrame {
 
 
     private void aplicarPermisosVisuales(String rol) {
-        // Ajustaremos la visibilidad de las opciones según
-        // los roles reales de Campus. Ocultar botones no
-        // sustituye la autorización en la lógica del sistema.
+        // Ajustaremos la visibilidad de las opciones según los roles reales de Campus. Ocultar botones no
     }
 
     private String escapar(String texto) {

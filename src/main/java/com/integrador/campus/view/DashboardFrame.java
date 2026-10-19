@@ -8,11 +8,11 @@ import java.awt.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.integrador.campus.view.Modulo.EstudiantePanel;
 import com.integrador.campus.Util.Permisos;
 import com.integrador.campus.view.Modulo.UsuarioPanel;
 import com.integrador.campus.view.Modulo.CursoMateriaPanel;
-
+import com.integrador.campus.view.Modulo.EstudiantePanel;
+import com.integrador.campus.view.Modulo.DocentePanel;
 
 public class DashboardFrame extends JFrame {
     private final Color azulOscuro = new Color(25, 45, 80);
@@ -25,13 +25,15 @@ public class DashboardFrame extends JFrame {
     private final JLabel lblTitulo;
     private final JLabel lblUsuario;
     private final Map<String, JButton> botonesMenu = new LinkedHashMap<>();
+    private final Map<String, Component> espacios = new LinkedHashMap<>();
+    private final String rol;
     
     //instancia de los paneles de módulos
     private final EstudiantePanel estudiantePanel = new EstudiantePanel();
     private final UsuarioPanel usuarioPanel = new UsuarioPanel();
     private final CursoMateriaPanel cursosMateriasPanel = new CursoMateriaPanel();
-    private final Map<String, Component> espacios = new LinkedHashMap<>();
-    private final String rol;
+    private final DocentePanel docentePanel = new DocentePanel();
+
 
     public DashboardFrame(String nombreUsuario, String rol) {
         this.rol = rol;
@@ -348,6 +350,9 @@ public class DashboardFrame extends JFrame {
                 case "Estudiantes":
                 contenido.add(estudiantePanel, BorderLayout.CENTER);
                 break;
+            case "Docentes":
+                contenido.add(docentePanel, BorderLayout.CENTER);
+                break;
             default:
                 mostrarInicio();
                 return;
@@ -362,9 +367,13 @@ public class DashboardFrame extends JFrame {
         for (Map.Entry<String, JButton> entrada : botonesMenu.entrySet()) {
             boolean permitido = Permisos.puedeAcceder(rol, entrada.getKey());
             entrada.getValue().setVisible(permitido);
-            espacios.get(entrada.getKey()).setVisible(permitido);
+
+            Component espacio = espacios.get(entrada.getKey());
+            if (espacio != null) {
+                espacio.setVisible(permitido);
+            }
         }
-    }
+}
 
     private String escapar(String texto) {
         if (texto == null) {
@@ -383,6 +392,8 @@ public class DashboardFrame extends JFrame {
     public EstudiantePanel getEstudiantePanel() {
         return estudiantePanel;
     }
+    public DocentePanel getDocentePanel() {
+        return docentePanel;
+    }
 
 }
-

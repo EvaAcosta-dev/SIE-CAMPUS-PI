@@ -16,6 +16,7 @@ public class DashboardController {
         Usuario usuario = new Usuario();
         UsuarioDao usuariosDao = new UsuarioDao();
         new UsuarioController(usuariosDao, usuario, vista.getUsuarioPanel());
+        new EstudianteController(new com.integrador.campus.dao.EstudianteDao(), vista.getEstudiantePanel(), rol);
 
         
     }

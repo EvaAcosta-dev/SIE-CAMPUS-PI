@@ -8,6 +8,7 @@ import java.awt.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.integrador.campus.view.Modulo.EstudiantePanel;
 import com.integrador.campus.Util.Permisos;
 import com.integrador.campus.view.Modulo.UsuarioPanel;
 import com.integrador.campus.view.Modulo.CursoMateriaPanel;
@@ -26,6 +27,7 @@ public class DashboardFrame extends JFrame {
     private final Map<String, JButton> botonesMenu = new LinkedHashMap<>();
     
     //instancia de los paneles de módulos
+    private final EstudiantePanel estudiantePanel = new EstudiantePanel();
     private final UsuarioPanel usuarioPanel = new UsuarioPanel();
     private final CursoMateriaPanel cursosMateriasPanel = new CursoMateriaPanel();
     private final Map<String, Component> espacios = new LinkedHashMap<>();
@@ -343,6 +345,9 @@ public class DashboardFrame extends JFrame {
             case "Cursos y materias":
                 contenido.add(cursosMateriasPanel, BorderLayout.CENTER);
                 break;
+                case "Estudiantes":
+                contenido.add(estudiantePanel, BorderLayout.CENTER);
+                break;
             default:
                 mostrarInicio();
                 return;
@@ -374,6 +379,9 @@ public class DashboardFrame extends JFrame {
 
     public UsuarioPanel getUsuarioPanel() {
         return usuarioPanel;
+    }
+    public EstudiantePanel getEstudiantePanel() {
+        return estudiantePanel;
     }
 
 }

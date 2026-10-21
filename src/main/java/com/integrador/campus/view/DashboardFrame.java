@@ -13,6 +13,7 @@ import com.integrador.campus.view.Modulo.UsuarioPanel;
 import com.integrador.campus.view.Modulo.CursoMateriaPanel;
 import com.integrador.campus.view.Modulo.EstudiantePanel;
 import com.integrador.campus.view.Modulo.DocentePanel;
+import com.integrador.campus.view.Modulo.AcudientePanel;
 
 public class DashboardFrame extends JFrame {
     private final Color azulOscuro = new Color(25, 45, 80);
@@ -33,6 +34,7 @@ public class DashboardFrame extends JFrame {
     private final UsuarioPanel usuarioPanel = new UsuarioPanel();
     private final CursoMateriaPanel cursosMateriasPanel = new CursoMateriaPanel();
     private final DocentePanel docentePanel = new DocentePanel();
+    private final AcudientePanel acudientePanel = new AcudientePanel();
 
 
     public DashboardFrame(String nombreUsuario, String rol) {
@@ -353,6 +355,9 @@ public class DashboardFrame extends JFrame {
             case "Docentes":
                 contenido.add(docentePanel, BorderLayout.CENTER);
                 break;
+            case "Acudientes":
+                contenido.add(acudientePanel, BorderLayout.CENTER);
+                break;
             default:
                 mostrarInicio();
                 return;
@@ -395,5 +400,7 @@ public class DashboardFrame extends JFrame {
     public DocentePanel getDocentePanel() {
         return docentePanel;
     }
-
+    public AcudientePanel getAcudientePanel() {
+        return acudientePanel;
+    }
 }

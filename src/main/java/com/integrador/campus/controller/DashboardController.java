@@ -1,6 +1,8 @@
 package com.integrador.campus.controller;
 
 import com.integrador.campus.dao.CursoDao;
+import com.integrador.campus.dao.DocenteDao;
+import com.integrador.campus.dao.EstudianteDao;
 import com.integrador.campus.dao.UsuarioDao;
 import com.integrador.campus.model.Cursos;
 import com.integrador.campus.model.Usuario;
@@ -17,6 +19,7 @@ public class DashboardController {
         UsuarioDao usuariosDao = new UsuarioDao();
         new UsuarioController(usuariosDao, usuario, vista.getUsuarioPanel());
         new EstudianteController(new com.integrador.campus.dao.EstudianteDao(), vista.getEstudiantePanel(), rol);
+        new DocenteController(new com.integrador.campus.dao.DocenteDao(), vista.getDocentePanel(), rol);
 
         
     }

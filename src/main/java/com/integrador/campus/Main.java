@@ -15,7 +15,8 @@ public class Main {
             LoginFrame loginFrame = new LoginFrame();
             UsuarioDao usuarioDao = new UsuarioDao();
             new LoginController(usuarioDao, loginFrame);
-            loginFrame.setVisible(true);
+         
+           loginFrame.setVisible(true);
         });
     }
 }

@@ -5,6 +5,16 @@ import javax.swing.border.EmptyBorder;
 
 import java.awt.*;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.integrador.campus.controller.AnioController;
+import com.integrador.campus.controller.GradoController;
+import com.integrador.campus.controller.NivelController;
+import com.integrador.campus.controller.PeriodoController;
+import com.integrador.campus.dao.AnioLectivoDao;
+import com.integrador.campus.dao.GradoDao;
+import com.integrador.campus.dao.NivelDao;
+import com.integrador.campus.dao.PeriodoDao;
+import com.integrador.campus.model.AnioLectivo;
+import com.integrador.campus.model.Periodo;
 
 
 public class AcademicoPanel extends JPanel {
@@ -16,11 +26,24 @@ public class AcademicoPanel extends JPanel {
     private final GradoFormPanel gradoFormPanel = new GradoFormPanel();
     private final PeriodoFormPanel periodoPanel=new PeriodoFormPanel();
 
+    Periodo periodo=new Periodo();
+    PeriodoDao periodoDao=new PeriodoDao();
+    AnioLectivoDao anioDao=new AnioLectivoDao();
+    PeriodoController periodoController=new PeriodoController(periodoPanel, periodoDao, anioDao);
+
+    AnioLectivo anioLectivo=new AnioLectivo();
+    AnioLectivoDao anioLectivoDao=new AnioLectivoDao();
+    AnioController anioController=new AnioController(anioFormPanel,anioLectivo,anioLectivoDao);
+
+    NivelDao nivelDao=new NivelDao();
+    NivelController nivelController=new NivelController(nivelPanel, nivelDao);
+    GradoDao gradoDao =new GradoDao();
+    GradoController gradoController=new GradoController(gradoFormPanel, gradoDao, nivelDao);
 
     public  AcademicoPanel (){
         setLayout(new BorderLayout(15, 15));
         setBackground(fondo);
-        setBorder(new EmptyBorder(15, 15, 15, 15));
+        setBorder(new EmptyBorder(2, 15, 15, 15));
 
         // Crear el componente de pestañas
         JTabbedPane tabbedPane = new JTabbedPane();

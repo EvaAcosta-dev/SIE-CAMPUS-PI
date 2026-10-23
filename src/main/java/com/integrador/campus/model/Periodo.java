@@ -72,7 +72,6 @@ public class Periodo {
     public void setIdAnio(int idAnio) {
         this.idAnio = idAnio;
     }
-
     public int getAnio() {
         return anio;
     }

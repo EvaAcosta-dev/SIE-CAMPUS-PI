@@ -47,7 +47,7 @@ public class CursoFormPanel extends JPanel {
         JPanel panelFormulario = new JPanel();
         panelFormulario.setLayout(new BoxLayout(panelFormulario, BoxLayout.Y_AXIS));
         panelFormulario.setBackground(Color.WHITE);
-        panelFormulario.setBorder(new EmptyBorder(20, 20, 20, 20));
+        panelFormulario.setBorder(new EmptyBorder(10, 20, 20, 20));
         panelFormulario.setPreferredSize(new Dimension(300, 600));
 
         JLabel lblTitulo = new JLabel("Gestión de Cursos");
@@ -92,6 +92,7 @@ public class CursoFormPanel extends JPanel {
         panelBotones.setLayout(new BoxLayout(panelBotones, BoxLayout.Y_AXIS));
         panelBotones.setOpaque(false);
         panelBotones.setAlignmentX(Component.LEFT_ALIGNMENT);
+        panelBotones.setMaximumSize(new Dimension(Integer.MAX_VALUE,120) );
 
         btnGuardarCurso.setAlignmentX(Component.LEFT_ALIGNMENT);
         btnGuardarCurso.setMaximumSize(new Dimension(Integer.MAX_VALUE, 38));
@@ -171,7 +172,13 @@ public class CursoFormPanel extends JPanel {
 
         panelTabla.add(centroTabla, BorderLayout.CENTER);
 
-        add(panelFormulario, BorderLayout.WEST);
+        JScrollPane scrollFormulario = new JScrollPane(panelFormulario);
+        scrollFormulario.setBorder(null);
+        scrollFormulario.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollFormulario.getVerticalScrollBar().setUnitIncrement(16);
+        scrollFormulario.setPreferredSize(new Dimension(300, 0));
+        
+        add(scrollFormulario, BorderLayout.WEST);
         add(panelTabla, BorderLayout.CENTER);
 
         // Estado inicial de botones de acción

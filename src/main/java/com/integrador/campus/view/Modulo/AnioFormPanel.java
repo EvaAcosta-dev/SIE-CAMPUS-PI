@@ -326,8 +326,4 @@ public class AnioFormPanel extends JPanel{
         return txtBuscarAnio;
     }
 
-
-
-
-    
 }

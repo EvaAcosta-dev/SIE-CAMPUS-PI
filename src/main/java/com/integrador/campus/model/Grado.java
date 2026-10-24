@@ -58,6 +58,7 @@ public class Grado {
     public void setNombreNivel(String nombreNivel) {
         this.nombreNivel = nombreNivel;
     }
+    
     @Override
     public String toString() {
         return nombreVisible;

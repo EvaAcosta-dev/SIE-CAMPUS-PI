@@ -11,6 +11,7 @@ import com.integrador.campus.model.Nivel;
 
 public class NivelDao {
 public boolean registrarNivel(Nivel nivel) {
+    
         // Implementar la lógica para registrar un nivel en la base de datos
         String sql = "INSERT INTO nivel (nombre_nivel) VALUES (?)";
         try (Connection con = BDConexion.getConexion();

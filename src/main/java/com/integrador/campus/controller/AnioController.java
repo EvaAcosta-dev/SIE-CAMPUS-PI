@@ -25,7 +25,10 @@ public class AnioController {
         configurarEventos();
         listarAnios("");
     }
-
+    /**
+     * Escucha de los botones y campos de texto 
+     * de la vista con los métodos lógicos de este controlador (Listeners de Swing).
+     */
     private void configurarEventos() {
         vista.getBtnGuardarAnio().addActionListener(e -> guardarAnio());
         vista.getBtnActualizarAnio().addActionListener(e -> actualizarAnio());
@@ -34,17 +37,19 @@ public class AnioController {
         vista.getBtnBuscarAnio().addActionListener(e -> buscarAnios());
         vista.getBtnMostrarAnio().addActionListener(e -> mostrarTodos());
         vista.getBtnCambiarEstadoAnio().addActionListener(e -> cambiarEstado());
+        // Permite buscar directamente al presionar 'Enter' en el campo de texto
         vista.getTxtBuscarAnio().addActionListener(e -> buscarAnios());
-
+        // Escucha los cambios de selección en las filas de la tabla de la interfaz
         vista.getTabla().getSelectionModel().addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting()) {
+            if (!e.getValueIsAdjusting()) {// valueIsAdjusting evita que el evento se dispare dos veces 
                 seleccionarAnio();
             }
         });
     }
+    //Consulta los años lectivos en la base de datos aplicando un filtro de búsqueda 
 
     private void listarAnios(String criterio) {
-        try {
+        try {// Realiza la petición al DAO
             List<AnioLectivo> anios = anioLectivoDao.listaAnioLectivos(criterio);
             DefaultTableModel modelo = vista.getModeloTabla();
             modelo.setRowCount(0);
@@ -67,13 +72,13 @@ public class AnioController {
             vista.mostrarError("No fue posible cargar los años lectivos: " + e.getMessage());
         }
     }
-
+ // Procesa la inserción de un nuevo año lectivo
     private void guardarAnio() {
         AnioLectivo anio = leerFormulario();
         if (anio == null) {
             return;
         }
-
+        // Ejecuta el insert en la base de datos
         if (anioLectivoDao.registrarAnioLectivo(anio)) {
             vista.mostrarMensaje("Año lectivo registrado correctamente.");
             limpiarFormulario();
@@ -82,7 +87,10 @@ public class AnioController {
             vista.mostrarError("No se pudo registrar el año lectivo.");
         }
     }
-
+/**
+     * Procesa la modificación de un registro ya existente.
+     * Requiere que el usuario haya seleccionado una fila previamente.
+     */
     private void actualizarAnio() {
         if (!hayAnioSeleccionado()) {
             return;
@@ -92,8 +100,8 @@ public class AnioController {
         if (anio == null) {
             return;
         }
-        anio.setIdAnio(idAnioSeleccionado);
-
+        anio.setIdAnio(idAnioSeleccionado);//toma el id de la fila seleccionada para aplicar en el where de sql
+        // Ejecuta el update en la base de datos
         if (anioLectivoDao.actualizaAnioLectivo(anio)) {
             vista.mostrarMensaje("Año lectivo actualizado correctamente.");
             limpiarFormulario();
@@ -102,15 +110,14 @@ public class AnioController {
             vista.mostrarError("No se pudo actualizar el año lectivo.");
         }
     }
-
+//elimina un usuario
     private void eliminarAnio() {
         if (!hayAnioSeleccionado()) {
             return;
         }
         if (!vista.confirmar("¿Estás seguro de que deseas eliminar este año lectivo?")) {
             return;
-        }
-
+        }   // Ejecuta el delete en la base de datos
         if (anioLectivoDao.eliminarAnioLectivo(idAnioSeleccionado)) {
             vista.mostrarMensaje("Año lectivo eliminado correctamente.");
             limpiarFormulario();
@@ -119,7 +126,7 @@ public class AnioController {
             vista.mostrarError("No se pudo eliminar el año lectivo.");
         }
     }
-
+//permite cambiar estado del año activo/inactivo
     private void cambiarEstado() {
         if (!hayAnioSeleccionado()) {
             return;
@@ -127,9 +134,10 @@ public class AnioController {
 
         int filaVista = vista.getTabla().getSelectedRow();
         int filaModelo = vista.getTabla().convertRowIndexToModel(filaVista);
-        String estadoActual = String.valueOf(
-                vista.getModeloTabla().getValueAt(filaModelo, 4));
+        // Obtiene el estado actual de la columna 4(estado) del modelo de la tabla        
+        String estadoActual = String.valueOf(vista.getModeloTabla().getValueAt(filaModelo, 4));
         String estadoFormulario = String.valueOf(vista.getCmbEstado().getSelectedItem());
+        // Si coincide con el formulario lo invierte, sino toma el del combo directamente
         String nuevoEstado = estadoFormulario.equalsIgnoreCase(estadoActual)
                 ? ("Activo".equalsIgnoreCase(estadoActual) ? "Inactivo" : "Activo")
                 : estadoFormulario;
@@ -137,7 +145,7 @@ public class AnioController {
         if (!vista.confirmar("¿Deseas cambiar el estado a " + nuevoEstado + "?")) {
             return;
         }
-
+        // Ejecuta la actualización parcial del estado en la base de datos
         if (anioLectivoDao.cambiarEstadoAnio(idAnioSeleccionado, nuevoEstado)) {
             vista.mostrarMensaje("El año lectivo ahora está " + nuevoEstado.toLowerCase() + ".");
             limpiarFormulario();
@@ -155,7 +163,10 @@ public class AnioController {
         vista.getTxtBuscarAnio().setText("");
         listarAnios("");
     }
-
+/**
+     * Se dispara cuando el usuario da clic sobre una fila de la tabla. 
+     * Extrae los datos de la fila y los coloca de vuelta en los cuadros del formulario para editarlos.
+     */
     private void seleccionarAnio() {
         int filaVista = vista.getTabla().getSelectedRow();
         if (filaVista < 0) {
@@ -165,9 +176,10 @@ public class AnioController {
 
         int filaModelo = vista.getTabla().convertRowIndexToModel(filaVista);
         DefaultTableModel modelo = vista.getModeloTabla();
-        idAnioSeleccionado = ((Number) modelo.getValueAt(filaModelo, 0)).intValue();
+        idAnioSeleccionado = ((Number) modelo.getValueAt(filaModelo, 0)).intValue(); // Captura el ID 
 
         vista.getTxtAnio().setText(String.valueOf(modelo.getValueAt(filaModelo, 1)));
+//Los objetos LocalDate guardados en el JTable se transforman a java.util.Date para el JDateChooser
         vista.getDateChooserInicio().setDate(toDate((LocalDate) modelo.getValueAt(filaModelo, 2)));
         vista.getDateChooserFin().setDate(toDate((LocalDate) modelo.getValueAt(filaModelo, 3)));
         vista.getCmbEstado().setSelectedItem(modelo.getValueAt(filaModelo, 4));
@@ -193,11 +205,6 @@ public class AnioController {
             anio = Integer.parseInt(textoAnio);
         } catch (NumberFormatException e) {
             vista.mostrarError("El año debe ser un número entero.");
-            return null;
-        }
-
-        if (anio < 1900 || anio > 9999) {
-            vista.mostrarError("Ingresa un año válido entre 1900 y 9999.");
             return null;
         }
 
@@ -253,5 +260,5 @@ public class AnioController {
 
     private Date toDate(LocalDate fecha) {
         return Date.from(fecha.atStartOfDay(ZoneId.systemDefault()).toInstant());
-    }
+    } 
 }

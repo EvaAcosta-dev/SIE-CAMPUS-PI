@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GradoDao {
-
+//registrar grado
     public boolean registrarGrado(Grado grado) {
         String sql = "INSERT INTO grado (numero_grado, nombre_visible, id_nivel) VALUES (?, ?, ?)";
         try (Connection con = BDConexion.getConexion();
@@ -24,7 +24,7 @@ public class GradoDao {
             return false;
         }
     }
-
+//actualizar grado
     public boolean actualizarGrado(Grado grado) {
         String sql = "UPDATE grado SET numero_grado = ?, nombre_visible = ?, id_nivel = ? "
                 + "WHERE id_grado = ?";
@@ -40,7 +40,7 @@ public class GradoDao {
             return false;
         }
     }
-
+//eliminar grado
     public boolean eliminarGrado(int idGrado) {
         String sql = "DELETE FROM grado WHERE id_grado = ?";
         try (Connection con = BDConexion.getConexion();
@@ -56,7 +56,7 @@ public class GradoDao {
     public List<Grado> listaGrados() {
         return listaGrados("");
     }
-
+//listar grados para busqueda
     public List<Grado> listaGrados(String criterio) {
         List<Grado> grados = new ArrayList<>();
         String sql = "SELECT g.id_grado, g.numero_grado, g.nombre_visible, "

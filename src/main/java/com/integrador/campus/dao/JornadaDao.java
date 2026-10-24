@@ -10,7 +10,7 @@ import com.integrador.campus.config.BDConexion;
 import com.integrador.campus.model.Jornada;
 
 public class JornadaDao {
-    //metodo para registrar una jornada
+    //metodo para registrar una jornada 
     public boolean registrarJornada(Jornada jornada) {
         String sql = "INSERT INTO jornada (nombre_jornada) VALUES (?)";
         try (Connection con = BDConexion.getConexion();

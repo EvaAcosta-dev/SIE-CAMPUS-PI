@@ -48,6 +48,7 @@ public class AcademicoPanel extends JPanel {
         // Crear el componente de pestañas
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        
     // Agregar los paneles correspondientes a cada pestaña
         tabbedPane.addTab("Año Escolar", anioFormPanel);
         tabbedPane.addTab("Niveles Escolares", nivelPanel);
@@ -57,4 +58,4 @@ public class AcademicoPanel extends JPanel {
         // Agregar el contenedor al panel principal
         add(tabbedPane, BorderLayout.CENTER);
     }
-}
+} 

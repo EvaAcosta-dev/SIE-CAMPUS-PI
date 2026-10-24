@@ -101,6 +101,8 @@ public class PeriodoDao {
             return false;
         }
     }
+    //buscar periodo segun filtro aplicado
+    
     public List<Periodo> buscarPeriodos(String nombre, int orden, int anio) {
         List<Periodo> lista = new ArrayList<>();
         String sql = "SELECT p.id_periodo, p.nombre_periodo, p.id_anio, a.anio, p.orden, p.fecha_inicio, p.fecha_fin, p.activo " +

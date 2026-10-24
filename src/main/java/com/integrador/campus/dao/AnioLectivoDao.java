@@ -163,7 +163,6 @@ public class AnioLectivoDao {
             "Error al listar años lectivos: " + e.getMessage()
         );
     }
-
     return anioLectivos;
 }
 }

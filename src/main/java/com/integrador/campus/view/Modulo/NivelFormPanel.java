@@ -248,7 +248,6 @@ private final Color azulOscuro = new Color(25, 45, 80);
     public JButton getBtnBuscarNivel() { return btnBuscarNivel; }
     public JButton getBtnMostrarNivel() { return btnMostrarNivel; }
     public JTextField getTxtBuscarNivel() { return txtBuscarNivel; }
-
 }
 
 

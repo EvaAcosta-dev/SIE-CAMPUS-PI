@@ -37,6 +37,6 @@ public class AnioLectivo {
 
     @Override
     public String toString() {
-        return String.valueOf(anio); // Esto permite que el JComboBox muestre el año (ej: 2026) 
+        return String.valueOf(anio); // Esto permite que el JComboBox muestre el año(ej: 2026) 
     }
 }

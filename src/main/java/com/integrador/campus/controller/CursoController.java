@@ -104,15 +104,9 @@ public class CursoController implements ActionListener {
             try {
                 String textoBusqueda = vista.txtBuscar.getText().trim();
                 List<Cursos> filtrados = cursoDao.listaCursos(textoBusqueda);
-                // Validamos si la búsqueda no arrojó resultados
-                if (filtrados.isEmpty()) {
-                    vista.mostrarError("El criterio de búsqueda no existe. Intente nuevamente.");
-                    listarTodosLosCursos(); // Recarga la tabla con todos los registros para que no quede vacía
-                } else {
-                    cursosActuales.clear();
-                    cursosActuales.addAll(filtrados);
-                    vista.llenarTablaCursos(filtrados);
-                }
+                cursosActuales.clear();
+                cursosActuales.addAll(filtrados);
+                vista.llenarTablaCursos(filtrados);
             } catch (SQLException ex) {
                 vista.mostrarError("Error en la búsqueda: " + ex.getMessage());
             }

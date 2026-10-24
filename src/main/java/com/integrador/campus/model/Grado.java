@@ -5,7 +5,6 @@ public class Grado {
     private short numeroGrado;
     private String nombreVisible;
     private int idNivel;
-    private String nombreNivel;
     
     public Grado() {
     }
@@ -50,15 +49,6 @@ public class Grado {
     public void setIdNivel(int idNivel) {
         this.idNivel = idNivel;
     }
-
-    public String getNombreNivel() {
-        return nombreNivel;
-    }
-
-    public void setNombreNivel(String nombreNivel) {
-        this.nombreNivel = nombreNivel;
-    }
-    
     @Override
     public String toString() {
         return nombreVisible;

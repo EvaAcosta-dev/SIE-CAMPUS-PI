@@ -5,7 +5,7 @@ public class Nivel {
     private String nombreNivel;
 
     public Nivel() {
-    } 
+    }
 
     // Constructor
     public Nivel(int idNivel, String nombreNivel) {

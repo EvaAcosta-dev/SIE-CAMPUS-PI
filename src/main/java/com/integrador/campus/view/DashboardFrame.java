@@ -10,7 +10,6 @@ import java.util.Map;
 
 import com.integrador.campus.Util.Permisos;
 import com.integrador.campus.view.Modulo.UsuarioPanel;
-import com.integrador.campus.view.Modulo.AcademicoPanel;
 import com.integrador.campus.view.Modulo.CursoMateriaPanel;
 import com.integrador.campus.view.Modulo.EstudiantePanel;
 import com.integrador.campus.view.Modulo.DocentePanel;
@@ -33,9 +32,6 @@ public class DashboardFrame extends JFrame {
     private final EstudiantePanel estudiantePanel = new EstudiantePanel();
     private final UsuarioPanel usuarioPanel = new UsuarioPanel();
     private final CursoMateriaPanel cursosMateriasPanel = new CursoMateriaPanel();
-    private final AcademicoPanel academicoPanel=new AcademicoPanel();
-
-   
     private final DocentePanel docentePanel = new DocentePanel();
 
 
@@ -156,10 +152,8 @@ public class DashboardFrame extends JFrame {
 
             if (respuesta == JOptionPane.YES_OPTION) {
                 dispose();
-                // Aquí se reabrirá el Login luego de cerrar sesion
-                 LoginFrame loginFrame = new LoginFrame();
-                  loginFrame.setVisible(true);
-
+                // Aquí se abrirá el LoginFrame al integrar
+                // el flujo de autenticación.
             }
         });
 
@@ -353,14 +347,9 @@ public class DashboardFrame extends JFrame {
             case "Cursos y materias":
                 contenido.add(cursosMateriasPanel, BorderLayout.CENTER);
                 break;
-                case "Academico":
-                        contenido.add(academicoPanel,BorderLayout.CENTER);
-                break; 
-
                 case "Estudiantes":
                 contenido.add(estudiantePanel, BorderLayout.CENTER);
                 break;
-
             case "Docentes":
                 contenido.add(docentePanel, BorderLayout.CENTER);
                 break;

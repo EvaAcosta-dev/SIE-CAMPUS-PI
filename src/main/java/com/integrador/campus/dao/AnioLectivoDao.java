@@ -27,13 +27,14 @@ public class AnioLectivoDao {
     
     // Registrar año escolar
     public boolean registrarAnioLectivo(AnioLectivo anioLectivo){
-        String sql ="INSERT INTO anio_lectivo (anio,fecha_inicio,fecha_fin,estado) VALUES (?,?,?,?)";
+        String sql ="INSERT INTO anio_lectivo (id_anio,anio,fecha_inicio,fecha_fin,estado) VALUES (?,?,?,?,?)";
         try(Connection con = BDConexion.getConexion();
             PreparedStatement ps = con.prepareStatement(sql)){  
-            ps.setInt(1,anioLectivo.getAnio());
-            ps.setDate(2, java.sql.Date.valueOf(anioLectivo.getFechaInicio()));
-            ps.setDate(3,java.sql.Date.valueOf(anioLectivo.getFechaFin()));
-            ps.setString(4, anioLectivo.getEstado());
+            ps.setInt(1,anioLectivo.getIdAnio());
+            ps.setInt(2,anioLectivo.getAnio());
+            ps.setDate(3, java.sql.Date.valueOf(anioLectivo.getFechaInicio()));
+            ps.setDate(4,java.sql.Date.valueOf(anioLectivo.getFechaFin()));
+            ps.setString(5, anioLectivo.getEstado());
             ps.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -121,7 +122,7 @@ public class AnioLectivoDao {
 
         String sql =
             "UPDATE anio_lectivo SET estado = ? "
-            + "WHERE id_anio = ?";
+            + "WHERE id_estado = ?";
 
         try (Connection con = BDConexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -163,6 +164,7 @@ public class AnioLectivoDao {
             "Error al listar años lectivos: " + e.getMessage()
         );
     }
+
     return anioLectivos;
 }
 }

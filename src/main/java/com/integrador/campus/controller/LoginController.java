@@ -56,7 +56,8 @@ public class LoginController implements ActionListener {
         // Nombre completo para mostrar en el dashboard
         String nombreCompleto = usuarioLogeado.getNombre() + " " + usuarioLogeado.getApellido();
         DashboardController dashController = new DashboardController(
-                nombreCompleto, usuarioLogeado.getRol().getNombreRol());
+                nombreCompleto, usuarioLogeado.getRol().getNombreRol(),
+                usuarioLogeado.getIdUsuario());
         dashController.iniciar();
         loginView.dispose();
     }

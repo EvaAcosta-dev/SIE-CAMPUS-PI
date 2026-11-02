@@ -1,7 +1,6 @@
 package com.integrador.campus.dao;
 
 import com.integrador.campus.config.BDConexion;
-import com.integrador.campus.model.CorreoEnvio;
 import com.integrador.campus.model.Notificacion;
 import com.integrador.campus.model.Rol;
 import com.integrador.campus.model.Usuario;
@@ -222,34 +221,6 @@ public class NotificacionDao {
             }
         }
         return destinatarios;
-    }
-
-    /**
-     * Guarda el resultado de un intento de envío SMTP.
-     * Sirve para saber posteriormente si un correo fue enviado, falló o quedó pendiente.
-     */
-    public void registrarEnvio(CorreoEnvio envio) throws SQLException {
-        String sql = "INSERT INTO correo_envio "
-                + "(id_usuario_destino, correo_destino, asunto, mensaje, estado, detalle_error) "
-                + "VALUES (?, ?, ?, ?, ?, ?)";
-
-        try (Connection con = BDConexion.getConexion();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-            if (envio.getIdUsuarioDestino() == null) {
-                // Permite registros manuales que no estén asociados a un usuario.
-                ps.setNull(1, java.sql.Types.INTEGER);
-            } else {
-                // Guarda la relación opcional con el usuario destinatario.
-                ps.setLong(1, envio.getIdUsuarioDestino());
-            }
-            // Completa el correo, texto, estado y posible explicación de error.
-            ps.setString(2, envio.getCorreoDestino());
-            ps.setString(3, envio.getAsunto());
-            ps.setString(4, envio.getMensaje());
-            ps.setString(5, envio.getEstado());
-            ps.setString(6, envio.getDetalleError());
-            ps.executeUpdate();
-        }
     }
 
 }

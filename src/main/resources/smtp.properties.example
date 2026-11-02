@@ -1,0 +1,5 @@
+smtp.host=smtp.gmail.com
+smtp.port=587
+smtp.user=campus.sie@gmail.com
+smtp.password=CONTRASENA_DE_APLICACION
+smtp.from=campus.sie@gmail.com

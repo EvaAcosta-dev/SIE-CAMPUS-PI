@@ -14,8 +14,8 @@ import com.integrador.campus.view.Modulo.AcademicoPanel;
 import com.integrador.campus.view.Modulo.CursoMateriaPanel;
 import com.integrador.campus.view.Modulo.EstudiantePanel;
 import com.integrador.campus.view.Modulo.DocentePanel;
-import com.integrador.campus.view.Modulo.ModulosPendientesPanel;
 import com.integrador.campus.view.Modulo.NotificacionInternaPanel;
+import com.integrador.campus.view.Modulo.AcudientePanel;
 
 public class DashboardFrame extends JFrame {
     private final Color azulOscuro = new Color(25, 45, 80);
@@ -40,7 +40,7 @@ public class DashboardFrame extends JFrame {
    
     private final DocentePanel docentePanel = new DocentePanel();
     private final NotificacionInternaPanel notificacionInternaPanel;
-    private final ModulosPendientesPanel modulosPendientesPanel = new ModulosPendientesPanel();
+    private final AcudientePanel acudientePanel = new AcudientePanel();
 
 
     public DashboardFrame(String nombreUsuario, String rol, int idUsuario) {
@@ -372,7 +372,8 @@ public class DashboardFrame extends JFrame {
             case "Notificaciones":
                 contenido.add(notificacionInternaPanel, BorderLayout.CENTER);
                 break;
-            case "Acudientes":
+            case "Acudientes": 
+                contenido.add(acudientePanel, BorderLayout.CENTER);
                 break;
             case "Matrículas":
                  break;
@@ -380,8 +381,7 @@ public class DashboardFrame extends JFrame {
                  break;
             case "Notas":
                 break;
-            case "Boletines":
-                
+          case "Boletines":
                 break;
             default:
                 mostrarInicio();
@@ -428,5 +428,7 @@ public class DashboardFrame extends JFrame {
     public DocentePanel getDocentePanel() {
         return docentePanel;
     }
-
+    public AcudientePanel getAcudientePanel() {
+        return acudientePanel;
+    }
 }

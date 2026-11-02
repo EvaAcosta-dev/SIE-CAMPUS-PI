@@ -14,8 +14,12 @@ import com.integrador.campus.view.Modulo.AcademicoPanel;
 import com.integrador.campus.view.Modulo.CursoMateriaPanel;
 import com.integrador.campus.view.Modulo.EstudiantePanel;
 import com.integrador.campus.view.Modulo.DocentePanel;
+<<<<<<< HEAD
 import com.integrador.campus.view.Modulo.ModulosPendientesPanel;
 import com.integrador.campus.view.Modulo.NotificacionInternaPanel;
+=======
+import com.integrador.campus.view.Modulo.AcudientePanel;
+>>>>>>> 706fb88407fc59a25d390d26fffe8966763903b8
 
 public class DashboardFrame extends JFrame {
     private final Color azulOscuro = new Color(25, 45, 80);
@@ -39,8 +43,12 @@ public class DashboardFrame extends JFrame {
 
    
     private final DocentePanel docentePanel = new DocentePanel();
+<<<<<<< HEAD
     private final NotificacionInternaPanel notificacionInternaPanel;
     private final ModulosPendientesPanel modulosPendientesPanel = new ModulosPendientesPanel();
+=======
+    private final AcudientePanel acudientePanel = new AcudientePanel();
+>>>>>>> 706fb88407fc59a25d390d26fffe8966763903b8
 
 
     public DashboardFrame(String nombreUsuario, String rol, int idUsuario) {
@@ -369,6 +377,7 @@ public class DashboardFrame extends JFrame {
             case "Docentes":
                 contenido.add(docentePanel, BorderLayout.CENTER);
                 break;
+<<<<<<< HEAD
             case "Notificaciones":
                 contenido.add(notificacionInternaPanel, BorderLayout.CENTER);
                 break;
@@ -382,6 +391,10 @@ public class DashboardFrame extends JFrame {
                 break;
             case "Boletines":
                 
+=======
+            case "Acudientes":
+                contenido.add(acudientePanel, BorderLayout.CENTER);
+>>>>>>> 706fb88407fc59a25d390d26fffe8966763903b8
                 break;
             default:
                 mostrarInicio();
@@ -428,5 +441,7 @@ public class DashboardFrame extends JFrame {
     public DocentePanel getDocentePanel() {
         return docentePanel;
     }
-
+    public AcudientePanel getAcudientePanel() {
+        return acudientePanel;
+    }
 }

@@ -1,6 +1,7 @@
 package com.integrador.campus.view.Modulo;
 
-import com.integrador.campus.dao.NotificacionDao;
+import com.integrador.campus.controller.NotificacionController;
+import com.integrador.campus.controller.NotificacionController.ResultadoPublicacion;
 import com.integrador.campus.model.Notificacion;
 import com.integrador.campus.model.Rol;
 import com.integrador.campus.model.Usuario;
@@ -9,28 +10,36 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Vista Swing del módulo de notificaciones internas.
+ *
+ * Esta clase pertenece a la capa View de MVC. Muestra formularios, validaciones
+ * visuales, mensajes, confirmaciones y la bandeja. La lógica de acceso a datos
+ * se delega a NotificacionController y las operaciones SQL se realizan por
+ * medio de NotificacionDao.
+ */
 public class NotificacionInternaPanel extends JPanel {
 
+    // Opciones disponibles para seleccionar el alcance de la publicación.
     private static final String UNA_PERSONA = "Un usuario";
     private static final String POR_ROL = "Usuarios por rol";
     private static final String TODOS = "Todos los usuarios activos";
     private static final String SIN_FILTRO = "Sin filtro";
 
-    private final NotificacionDao dao = new NotificacionDao();
+    // Controlador que conecta esta vista con los datos y servicios del sistema.
+    private final NotificacionController controlador = new NotificacionController();
     private final int idUsuarioActual;
     private final boolean puedeCrear;
-    private final JComboBox<String> alcance = new JComboBox<>(
-            new String[]{UNA_PERSONA, POR_ROL, TODOS});
+    private final JComboBox<String> alcance = new JComboBox<>(new String[]{UNA_PERSONA, POR_ROL, TODOS});
     private final JComboBox<Usuario> usuarioDestino = new JComboBox<>();
     private final JComboBox<Object> rolDestino = new JComboBox<>();
-    private final JComboBox<String> tipo = new JComboBox<>(
-            new String[]{"CONVIVENCIA", "ASISTENCIA", "ACADEMICO", "CIRCULAR"});
+    private final JComboBox<String> tipo = new JComboBox<>( new String[]{"CONVIVENCIA", "ASISTENCIA", "ACADEMICO", "CIRCULAR"});
     private final JTextField titulo = new JTextField();
     private final JTextArea mensaje = new JTextArea(4, 30);
+    private final JCheckBox enviarCorreo = new JCheckBox("Enviar también por correo electrónico", true);
     private final JButton crear = new JButton("Publicar notificación");
     private final JButton actualizar = new JButton("Actualizar bandeja");
     private final JButton abrirBandeja = new JButton("Abrir mis notificaciones");
@@ -40,6 +49,16 @@ public class NotificacionInternaPanel extends JPanel {
     private JPanel listaTarjetas;
     private JLabel estadoBandeja;
 
+    /**
+     * Construye el panel según los permisos del usuario.
+     *
+     * Los roles administradores, de registro académico y docentes pueden
+     * publicar notificaciones. Todos los usuarios pueden consultar y marcar
+     * como leídas las notificaciones de su propia bandeja.
+     *
+     * @param rolUsuario rol del usuario conectado
+     * @param idUsuarioActual identificador usado para filtrar la bandeja
+     */
     public NotificacionInternaPanel(String rolUsuario, int idUsuarioActual) {
         this.idUsuarioActual = idUsuarioActual;
         String rol = rolUsuario == null ? "" : rolUsuario.trim().toUpperCase(Locale.ROOT);
@@ -71,11 +90,22 @@ public class NotificacionInternaPanel extends JPanel {
         configurarEventos();
     }
 
+    public void mostrarBandejaInterna(Component propietario) {
+        mostrarVentanaBandeja(propietario);
+    }
+
+    /**
+     * Construye visualmente el formulario usado para publicar avisos.
+     *
+     * Permite seleccionar el destinatario, el tipo, el título, el mensaje y
+     * si también debe enviarse una copia por correo electrónico.
+     *
+     * @return panel Swing listo para agregarse al dashboard
+     */
     private JPanel crearFormulario() {
         JPanel formulario = new JPanel(new GridBagLayout());
         formulario.setBackground(Color.WHITE);
-        formulario.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(228, 233, 241)),
+        formulario.setBorder(BorderFactory.createCompoundBorder( BorderFactory.createLineBorder(new Color(228, 233, 241)),
                 new EmptyBorder(12, 15, 12, 15)));
 
         JPanel individual = new JPanel(new BorderLayout(8, 0));
@@ -117,6 +147,8 @@ public class NotificacionInternaPanel extends JPanel {
 
         JPanel acciones = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
         acciones.setOpaque(false);
+        enviarCorreo.setOpaque(false);
+        acciones.add(enviarCorreo);
         acciones.add(crear);
         acciones.add(estado);
         c.gridx = 1;
@@ -127,6 +159,7 @@ public class NotificacionInternaPanel extends JPanel {
 
     private void agregarCampo(JPanel panel, GridBagConstraints c, int fila,
             String etiqueta, JComponent campo) {
+        // Coloca la etiqueta en la primera columna y el componente en la segunda.
         c.gridx = 0;
         c.gridy = fila;
         c.weightx = 0;
@@ -138,6 +171,7 @@ public class NotificacionInternaPanel extends JPanel {
     }
 
     private JPanel crearBandeja() {
+        // Construye la tarjeta visible desde el dashboard para abrir la bandeja.
         JPanel bandeja = new JPanel(new GridBagLayout());
         bandeja.setOpaque(false);
         JPanel tarjeta = new JPanel();
@@ -163,6 +197,7 @@ public class NotificacionInternaPanel extends JPanel {
     }
 
     private void configurarEventos() {
+        // Actualización manual, apertura de la ventana y cambio de selector.
         actualizar.addActionListener(e -> cargarBandeja());
         abrirBandeja.addActionListener(e ->
                 mostrarVentanaBandeja(SwingUtilities.getWindowAncestor(this)));
@@ -173,18 +208,20 @@ public class NotificacionInternaPanel extends JPanel {
     }
 
     private void mostrarSelectorDestino() {
+        // Cambia visualmente el campo de selección entre usuario, rol o todos.
         String seleccion = (String) alcance.getSelectedItem();
         String tarjeta = TODOS.equals(seleccion) ? SIN_FILTRO : seleccion;
         ((CardLayout) selectorDestino.getLayout()).show(selectorDestino, tarjeta);
     }
 
     private void cargarDestinatarios() {
+        // Carga usuarios y roles en segundo plano para no bloquear la interfaz.
         crear.setEnabled(false);
         estado.setText("Cargando usuarios y roles...");
         new SwingWorker<Object[], Void>() {
             @Override
             protected Object[] doInBackground() throws SQLException {
-                return new Object[]{dao.listarUsuariosActivos(null), dao.listarRoles()};
+                return controlador.listarUsuariosYRoles();
             }
 
             @Override
@@ -213,6 +250,7 @@ public class NotificacionInternaPanel extends JPanel {
     }
 
     private void publicar() {
+        // Valida los datos visibles antes de delegar la operación al controlador.
         String asunto = titulo.getText().trim();
         String texto = mensaje.getText().trim();
         if (asunto.isEmpty() || texto.isEmpty()) {
@@ -227,6 +265,7 @@ public class NotificacionInternaPanel extends JPanel {
         String seleccion = (String) alcance.getSelectedItem();
         Usuario destinoUnico = (Usuario) usuarioDestino.getSelectedItem();
         Object seleccionRol = rolDestino.getSelectedItem();
+        // Resuelve el rol seleccionado solo para pedir al controlador sus usuarios.
         Integer idRol = seleccionRol instanceof Rol
                 ? ((Rol) seleccionRol).getIdRol() : null;
         if (UNA_PERSONA.equals(seleccion) && destinoUnico == null) {
@@ -247,40 +286,46 @@ public class NotificacionInternaPanel extends JPanel {
         crear.setEnabled(false);
         estado.setText("Publicando...");
         String tipoSeleccionado = (String) tipo.getSelectedItem();
-        new SwingWorker<Integer, Void>() {
+        boolean enviarPorCorreo = enviarCorreo.isSelected();
+        // SwingWorker ejecuta la operación fuera del hilo gráfico.
+        new SwingWorker<ResultadoPublicacion, Void>() {
             @Override
-            protected Integer doInBackground() throws SQLException {
+            protected ResultadoPublicacion doInBackground() throws SQLException {
                 List<Usuario> destinatarios;
                 if (UNA_PERSONA.equals(seleccion)) {
                     destinatarios = List.of(destinoUnico);
                 } else {
-                    destinatarios = dao.listarUsuariosActivos(
+                    destinatarios = controlador.listarUsuariosActivos(
                             POR_ROL.equals(seleccion) ? idRol : null);
                 }
-                if (destinatarios.isEmpty()) {
-                    return 0;
-                }
-                List<Notificacion> notificaciones = new ArrayList<>();
-                for (Usuario usuario : destinatarios) {
-                    Notificacion notificacion = new Notificacion(
-                            usuario.getIdUsuario(), asunto, texto, tipoSeleccionado);
-                    notificaciones.add(notificacion);
-                }
-                dao.crearNotificaciones(notificaciones);
-                return notificaciones.size();
+                return controlador.publicar(destinatarios, asunto, texto,
+                        tipoSeleccionado, enviarPorCorreo);
             }
 
             @Override
             protected void done() {
                 crear.setEnabled(true);
                 try {
-                    int cantidad = get();
+                    ResultadoPublicacion resultado = get();
+                    int cantidad = resultado.getCantidadInternas();
                     if (cantidad == 0) {
                         estado.setText(" ");
                         mostrarError("No hay usuarios activos para ese destinatario o filtro.");
                         return;
                     }
-                    estado.setText("Publicada para " + cantidad + " usuario(s).");
+                    if (enviarPorCorreo) {
+                        estado.setText("Interna: " + cantidad
+                                + " | Correos enviados: " + resultado.getCorreosEnviados()
+                                + " | Errores: " + resultado.getErroresCorreo());
+                        if (!resultado.getDetalleError().isBlank()) {
+                            mostrarError("La notificación interna se publicó, pero "
+                                    + "el correo no pudo enviarse: "
+                                    + resultado.getDetalleError());
+                        }
+                    } else {
+                        estado.setText("Publicada internamente para "
+                                + cantidad + " usuario(s).");
+                    }
                     titulo.setText("");
                     mensaje.setText("");
                     cargarBandeja();
@@ -293,6 +338,7 @@ public class NotificacionInternaPanel extends JPanel {
     }
 
     public void mostrarVentanaBandeja(Component propietario) {
+        // Crea la ventana una sola vez y la reutiliza mientras siga abierta.
         if (ventanaBandeja == null || !ventanaBandeja.isDisplayable()) {
             Window owner = propietario instanceof Window
                     ? (Window) propietario : SwingUtilities.getWindowAncestor(this);
@@ -327,6 +373,7 @@ public class NotificacionInternaPanel extends JPanel {
     }
 
     private void cargarBandeja() {
+        // Obtiene las notificaciones mediante el controlador sin bloquear Swing.
         if (ventanaBandeja == null || !ventanaBandeja.isDisplayable()) {
             return;
         }
@@ -339,7 +386,7 @@ public class NotificacionInternaPanel extends JPanel {
         new SwingWorker<List<Notificacion>, Void>() {
             @Override
             protected List<Notificacion> doInBackground() throws SQLException {
-                return dao.listarNotificaciones(idUsuarioActual);
+                return controlador.listarBandeja(idUsuarioActual);
             }
 
             @Override
@@ -375,6 +422,7 @@ public class NotificacionInternaPanel extends JPanel {
     }
 
     private JPanel crearTarjetaNotificacion(Notificacion notificacion) {
+        // Presenta una notificación como una tarjeta con estado, fecha y mensaje.
         JPanel tarjeta = new JPanel(new BorderLayout(12, 8));
         tarjeta.setBackground(Color.WHITE);
         tarjeta.setBorder(BorderFactory.createCompoundBorder(
@@ -413,6 +461,7 @@ public class NotificacionInternaPanel extends JPanel {
     }
 
     private void mostrarDetalle(Notificacion notificacion) {
+        // Abre una ventana modal para leer el contenido completo del aviso.
         JDialog detalle = new JDialog(ventanaBandeja,
                 notificacion.getTitulo(), Dialog.ModalityType.APPLICATION_MODAL);
         detalle.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -445,11 +494,12 @@ public class NotificacionInternaPanel extends JPanel {
     }
 
     private void marcarComoLeida(Notificacion notificacion, JDialog detalle, JButton boton) {
+        // Usa el controlador para actualizar el estado sin ejecutar SQL en la vista.
         boton.setEnabled(false);
         new SwingWorker<Boolean, Void>() {
             @Override
             protected Boolean doInBackground() throws SQLException {
-                return dao.marcarComoLeida(
+                return controlador.marcarComoLeida(
                         notificacion.getIdNotificacion(), idUsuarioActual);
             }
 
@@ -474,15 +524,26 @@ public class NotificacionInternaPanel extends JPanel {
     }
 
     private String causa(Exception e) {
+        // Extrae la causa real de una excepción para mostrar un mensaje útil.
         Throwable causa = e.getCause();
         return causa == null || causa.getMessage() == null ? e.getMessage() : causa.getMessage();
     }
 
     private String nombreUsuario(Usuario usuario) {
+        // Forma el nombre completo mostrado en confirmaciones y listas.
         return usuario.getNombre() + " " + usuario.getApellido();
     }
 
+    private String limitar(String texto, int maximo) {
+        // Devuelve un texto seguro o limita su longitud para presentarlo.
+        if (texto == null || texto.isBlank()) {
+            return "Error de envío sin detalle.";
+        }
+        return texto.length() <= maximo ? texto : texto.substring(0, maximo);
+    }
+
     private void mostrarError(String texto) {
+        // Presenta una ventana gráfica de error con el mensaje recibido.
         JOptionPane.showMessageDialog(this, texto, "Notificaciones internas",
                 JOptionPane.ERROR_MESSAGE);
     }

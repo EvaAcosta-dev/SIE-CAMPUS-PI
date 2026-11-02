@@ -14,7 +14,8 @@ import com.integrador.campus.view.Modulo.AcademicoPanel;
 import com.integrador.campus.view.Modulo.CursoMateriaPanel;
 import com.integrador.campus.view.Modulo.EstudiantePanel;
 import com.integrador.campus.view.Modulo.DocentePanel;
-import com.integrador.campus.view.Modulo.NotificacionPanel;
+import com.integrador.campus.view.Modulo.ModulosPendientesPanel;
+import com.integrador.campus.view.Modulo.NotificacionInternaPanel;
 
 public class DashboardFrame extends JFrame {
     private final Color azulOscuro = new Color(25, 45, 80);
@@ -38,12 +39,13 @@ public class DashboardFrame extends JFrame {
 
    
     private final DocentePanel docentePanel = new DocentePanel();
-    private final NotificacionPanel notificacionPanel;
+    private final NotificacionInternaPanel notificacionInternaPanel;
+    private final ModulosPendientesPanel modulosPendientesPanel = new ModulosPendientesPanel();
 
 
     public DashboardFrame(String nombreUsuario, String rol, int idUsuario) {
         this.rol = rol;
-        this.notificacionPanel = new NotificacionPanel(rol, idUsuario);
+        this.notificacionInternaPanel = new NotificacionInternaPanel(rol, idUsuario);
         
         setTitle("Campus | Panel principal");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -368,7 +370,18 @@ public class DashboardFrame extends JFrame {
                 contenido.add(docentePanel, BorderLayout.CENTER);
                 break;
             case "Notificaciones":
-                contenido.add(notificacionPanel, BorderLayout.CENTER);
+                contenido.add(notificacionInternaPanel, BorderLayout.CENTER);
+                break;
+            case "Acudientes":
+                break;
+            case "Matrículas":
+                 break;
+            case "Asignaciones docentes":
+                 break;
+            case "Notas":
+                break;
+            case "Boletines":
+                
                 break;
             default:
                 mostrarInicio();
@@ -378,7 +391,7 @@ public class DashboardFrame extends JFrame {
         contenido.revalidate();
         contenido.repaint();
         if ("Notificaciones".equals(nombre)) {
-            notificacionPanel.mostrarBandejaInterna(this);
+            notificacionInternaPanel.mostrarBandejaInterna(this);
         }
     }
 

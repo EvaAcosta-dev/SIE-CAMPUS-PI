@@ -13,8 +13,8 @@ public class DashboardController {
 
     private final DashboardFrame vista;
 
-    public DashboardController(String nombreUsuario, String rol) {
-        vista = new DashboardFrame(nombreUsuario, rol);
+    public DashboardController(String nombreUsuario, String rol, int idUsuario) {
+        vista = new DashboardFrame(nombreUsuario, rol, idUsuario);
 
         Usuario usuario = new Usuario();
         UsuarioDao usuariosDao = new UsuarioDao();

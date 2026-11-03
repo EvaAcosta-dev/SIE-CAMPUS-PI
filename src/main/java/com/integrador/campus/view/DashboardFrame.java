@@ -14,6 +14,7 @@ import com.integrador.campus.view.Modulo.AcademicoPanel;
 import com.integrador.campus.view.Modulo.CursoMateriaPanel;
 import com.integrador.campus.view.Modulo.EstudiantePanel;
 import com.integrador.campus.view.Modulo.DocentePanel;
+import com.integrador.campus.view.Modulo.NotificacionInternaPanel;
 import com.integrador.campus.view.Modulo.AcudientePanel;
 
 public class DashboardFrame extends JFrame {
@@ -38,11 +39,13 @@ public class DashboardFrame extends JFrame {
 
    
     private final DocentePanel docentePanel = new DocentePanel();
+    private final NotificacionInternaPanel notificacionInternaPanel;
     private final AcudientePanel acudientePanel = new AcudientePanel();
 
 
-    public DashboardFrame(String nombreUsuario, String rol) {
+    public DashboardFrame(String nombreUsuario, String rol, int idUsuario) {
         this.rol = rol;
+        this.notificacionInternaPanel = new NotificacionInternaPanel(rol, idUsuario);
         
         setTitle("Campus | Panel principal");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -369,6 +372,9 @@ public class DashboardFrame extends JFrame {
             case "Acudientes":
                 contenido.add(acudientePanel, BorderLayout.CENTER);
                 break;
+            case "Notificaciones":
+                contenido.add(notificacionInternaPanel, BorderLayout.CENTER);
+                break; 
             default:
                 mostrarInicio();
                 return;
@@ -376,6 +382,9 @@ public class DashboardFrame extends JFrame {
 
         contenido.revalidate();
         contenido.repaint();
+        if ("Notificaciones".equals(nombre)) {
+            notificacionInternaPanel.mostrarBandejaInterna(this);
+        }
     }
 
 

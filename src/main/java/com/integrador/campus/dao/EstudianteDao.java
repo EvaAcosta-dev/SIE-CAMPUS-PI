@@ -1,7 +1,7 @@
 package com.integrador.campus.dao;
 
 import com.integrador.campus.Util.EncriptarPass;
-import com.integrador.campus.config.BDConexion;
+import com.integrador.campus.config.BDConnection;
 import com.integrador.campus.model.Estudiante;
 
 import java.sql.Connection;
@@ -33,7 +33,7 @@ public class EstudianteDao {
 
         List<Estudiante> lista = new ArrayList<>();
 
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             if (filtrar) {
@@ -64,7 +64,7 @@ public class EstudianteDao {
 
     // Crea el usuario (rol ESTUDIANTE) y el estudiante en una sola transacción
     public void registrar(Estudiante est) throws SQLException {
-        try (Connection con = BDConexion.getConexion()) {
+        try (Connection con = BDConnection.getConnection()) {
             con.setAutoCommit(false);
             try {
                 int idRol = obtenerIdRol(con, "ESTUDIANTE");
@@ -114,7 +114,7 @@ public class EstudianteDao {
 
     // Actualiza estudiante y su usuario. Si la contraseña viene vacía, se conserva.
     public void actualizar(Estudiante est) throws SQLException {
-        try (Connection con = BDConexion.getConexion()) {
+        try (Connection con = BDConnection.getConnection()) {
             con.setAutoCommit(false);
             try {
                 if (est.getIdUsuario() > 0) {
@@ -162,7 +162,7 @@ public class EstudianteDao {
 
     // Borra el estudiante y luego su usuario (si tiene matrículas, MySQL lo impide)
     public void eliminar(Estudiante est) throws SQLException {
-        try (Connection con = BDConexion.getConexion()) {
+        try (Connection con = BDConnection.getConnection()) {
             con.setAutoCommit(false);
             try {
                 try (PreparedStatement ps = con.prepareStatement(

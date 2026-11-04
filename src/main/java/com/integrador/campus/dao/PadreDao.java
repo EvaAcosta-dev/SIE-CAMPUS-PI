@@ -1,7 +1,7 @@
 package com.integrador.campus.dao;
 
 import com.integrador.campus.Util.EncriptarPass;
-import com.integrador.campus.config.BDConexion;
+import com.integrador.campus.config.BDConnection;
 import com.integrador.campus.model.Padre;
 
 import java.sql.Connection;
@@ -30,7 +30,7 @@ public class PadreDao {
 
         List<Padre> lista = new ArrayList<>();
 
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             if (filtrar) {
@@ -59,7 +59,7 @@ public class PadreDao {
         // Crea el usuario (rol PADRE), el acudiente y su primer vínculo
     // con un estudiante, todo en una sola transacción
     public void registrar(Padre padre, int idEstudiante, String parentesco) throws SQLException {
-        try (Connection con = BDConexion.getConexion()) {
+        try (Connection con = BDConnection.getConnection()) {
             con.setAutoCommit(false);
             try {
                 int idRol = obtenerIdRol(con, "PADRE");
@@ -124,7 +124,7 @@ public class PadreDao {
 
     // Actualiza acudiente y usuario. Si la clave viene vacía, se conserva.
     public void actualizar(Padre padre) throws SQLException {
-        try (Connection con = BDConexion.getConexion()) {
+        try (Connection con = BDConnection.getConnection()) {
             con.setAutoCommit(false);
             try {
                 if (padre.getIdUsuario() > 0) {
@@ -170,7 +170,7 @@ public class PadreDao {
 
     // Borra los vínculos con estudiantes, luego el acudiente y su usuario
     public void eliminar(Padre padre) throws SQLException {
-        try (Connection con = BDConexion.getConexion()) {
+        try (Connection con = BDConnection.getConnection()) {
             con.setAutoCommit(false);
             try {
                 try (PreparedStatement ps = con.prepareStatement(
@@ -213,7 +213,7 @@ public class PadreDao {
 
         List<Object[]> filas = new ArrayList<>();
 
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idPadre);
 
@@ -233,7 +233,7 @@ public class PadreDao {
 
     // Devuelve false si ese estudiante ya estaba vinculado a este acudiente
     public boolean vincular(int idPadre, int idEstudiante, String parentesco) throws SQLException {
-        try (Connection con = BDConexion.getConexion()) {
+        try (Connection con = BDConnection.getConnection()) {
 
             try (PreparedStatement ps = con.prepareStatement(
                     "SELECT COUNT(*) FROM rel_padre_estudiante "
@@ -261,7 +261,7 @@ public class PadreDao {
     }
 
     public void desvincular(int idRelacion) throws SQLException {
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(
                 "DELETE FROM rel_padre_estudiante WHERE id_relacion_padre_estudiante = ?")) {
             ps.setInt(1, idRelacion);

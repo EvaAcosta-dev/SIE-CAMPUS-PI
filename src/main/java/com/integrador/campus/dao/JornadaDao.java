@@ -6,14 +6,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import com.integrador.campus.config.BDConexion;
+import com.integrador.campus.config.BDConnection;
 import com.integrador.campus.model.Jornada;
 
 public class JornadaDao {
     //metodo para registrar una jornada 
     public boolean registrarJornada(Jornada jornada) {
         String sql = "INSERT INTO jornada (nombre_jornada) VALUES (?)";
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, jornada.getNombreJornada());
             ps.executeUpdate();
@@ -26,7 +26,7 @@ public class JornadaDao {
     //metodo para actualizar una jornada
     public boolean actualizarJornada(Jornada jornada) {
         String sql = "UPDATE jornada SET nombre_jornada=? WHERE id_jornada=?";
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, jornada.getNombreJornada());
             ps.setInt(2, jornada.getIdJornada());
@@ -40,7 +40,7 @@ public class JornadaDao {
     //metodo para eliminar una jornada
     public boolean eliminarJornada(int idJornada) {
         String sql = "DELETE FROM jornada WHERE id_jornada=?";
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idJornada);
             ps.executeUpdate();
@@ -54,7 +54,7 @@ public class JornadaDao {
     public List<Jornada> buscarJornadaPorNombre(String value) {
         List<Jornada> jornadas = new ArrayList<>();
         String sql = "SELECT id_jornada, nombre_jornada FROM jornada WHERE nombre_jornada LIKE ?";
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, "%" + value + "%");
             try (ResultSet rs = ps.executeQuery()) {
@@ -78,7 +78,7 @@ public class JornadaDao {
     String sql = "SELECT id_jornada, nombre_jornada "
                + "FROM jornada ORDER BY nombre_jornada ASC";
 
-    try (Connection con = BDConexion.getConexion();
+    try (Connection con = BDConnection.getConnection();
          PreparedStatement ps = con.prepareStatement(sql);
          ResultSet rs = ps.executeQuery()) {
 

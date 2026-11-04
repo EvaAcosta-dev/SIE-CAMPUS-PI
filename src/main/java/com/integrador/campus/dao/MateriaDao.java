@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import com.integrador.campus.config.BDConexion;
+import com.integrador.campus.config.BDConnection;
 import com.integrador.campus.model.Materia;
 import com.integrador.campus.model.Nivel;
 
@@ -14,7 +14,7 @@ public class MateriaDao {
     //registrar materia
     public boolean registrarMateria(Materia materia){
         String sql= "INSERT INTO materia (nombre_materia)VALUES (?)";
-         try (Connection con = BDConexion.getConexion();
+         try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, materia.getNombreMateria());
             ps.executeUpdate();
@@ -28,7 +28,7 @@ public class MateriaDao {
     public List<Materia> listarMaterias() {
         List<Materia> materias = new ArrayList<>();
         String sql = "SELECT id_materia, nombre_materia FROM materia ORDER BY nombre_materia ASC;";
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
@@ -45,7 +45,7 @@ public class MateriaDao {
     //metodo para actualizar materia
     public boolean actualizarMateria(Materia materia) {   
         String sql = "UPDATE materia SET nombre_materia=? WHERE id_materia=?";
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, materia.getNombreMateria());
             ps.setInt(2, materia.getIdMateria());
@@ -59,7 +59,7 @@ public class MateriaDao {
     //metodo para eliminar los materia
     public boolean eliminarMateria(int idMateria) {
         String sql = "DELETE FROM materia WHERE id_materia=?";
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idMateria);
             ps.executeUpdate();
@@ -74,7 +74,7 @@ public class MateriaDao {
     List<Materia> lista = new ArrayList<>();
         String sql = "SELECT id_materia, nombre_materia FROM materia WHERE nombre_materia LIKE ? "
         + "ORDER BY nombre_materia";
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             String buscar = "%" + value + "%";
             ps.setString(1, buscar);

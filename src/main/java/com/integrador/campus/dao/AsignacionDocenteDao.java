@@ -32,7 +32,7 @@ public class AsignacionDocenteDao {
     }
 
     public boolean actualizarAsignacion(AsignacionDocente a) {
-        String sql = "UPDATE asignacion_docente SET id_docente=?, id_materia=?, id_curso=?, anio_lectivo=?, estado=? WHERE id_asignacion";
+        String sql = "UPDATE asignacion_docente SET id_docente=?, id_materia=?, id_curso=?, anio_lectivo=?, estado=? WHERE id_asignacion = ?";
         try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, a.getIdDocente());
@@ -85,7 +85,7 @@ public class AsignacionDocenteDao {
     }
 
     public boolean eliminarAsignacion(int idAsignacion) {
-        String sql = "DELETE FROM asignacion_docente WHERE id_asignacion";
+        String sql = "DELETE FROM asignacion_docente WHERE id_asignacion = ?";
         try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idAsignacion);

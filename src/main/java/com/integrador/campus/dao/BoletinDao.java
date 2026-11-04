@@ -69,7 +69,7 @@ public class BoletinDao {
     }
 
     public boolean actualizarEstadoBoletin(int idBoletin, String estado) {
-        String sql = "UPDATE boletin SET estado_boletin WHERE id_boletin";
+        String sql = "UPDATE boletin SET estado_boletin = ? WHERE id_boletin = ?";
         try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, estado);
@@ -82,7 +82,7 @@ public class BoletinDao {
     }
 
     public boolean eliminarBoletin(int idBoletin) {
-        String sql = "DELETE FROM boletin WHERE id_boletin";
+        String sql = "DELETE FROM boletin WHERE id_boletin = ?";
         try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idBoletin);

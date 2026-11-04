@@ -34,7 +34,7 @@ public class CalificacionDao {
     }
 
     public boolean actualizarCalificacion(Calificacion cal) {
-        String sql = "UPDATE calificacion SET nota=?, periodo=?, observacion=? WHERE id_calificacion";
+        String sql = "UPDATE calificacion SET nota=?, periodo=?, observacion=? WHERE id_calificacion = ?";
         try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setDouble(1, cal.getNota());
@@ -121,7 +121,7 @@ public class CalificacionDao {
     }
 
     public boolean eliminarCalificacion(int idCalificacion) {
-        String sql = "DELETE FROM calificacion WHERE id_calificacion";
+        String sql = "DELETE FROM calificacion WHERE id_calificacion = ?";
         try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idCalificacion);

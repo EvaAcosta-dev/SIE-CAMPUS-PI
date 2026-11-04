@@ -33,7 +33,7 @@ public class AsistenciaDao {
     }
 
     public boolean actualizarAsistencia(Asistencia a) {
-        String sql = "UPDATE asistencia SET estado=?, observacion=? WHERE id_asistencia";
+        String sql = "UPDATE asistencia SET estado=?, observacion=? WHERE id_asistencia = ?";
         try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, a.getEstado());
@@ -81,7 +81,7 @@ public class AsistenciaDao {
     }
 
     public boolean eliminarAsistencia(int idAsistencia) {
-        String sql = "DELETE FROM asistencia WHERE id_asistencia";
+        String sql = "DELETE FROM asistencia WHERE id_asistencia = ?";
         try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idAsistencia);

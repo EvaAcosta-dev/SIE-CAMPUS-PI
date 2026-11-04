@@ -34,7 +34,7 @@ public class ConvivenciaDao {
     }
 
     public boolean actualizarConvivencia(Convivencia c) {
-        String sql = "UPDATE convivencia SET tipo_falta=?, observacion=?, medida_disciplinaria=?, estado=? WHERE id_convivencia";
+        String sql = "UPDATE convivencia SET tipo_falta=?, observacion=?, medida_disciplinaria=?, estado=? WHERE id_convivencia = ?";
         try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, c.getTipoFalta());
@@ -84,7 +84,7 @@ public class ConvivenciaDao {
     }
 
     public boolean eliminarConvivencia(int idConvivencia) {
-        String sql = "DELETE FROM convivencia WHERE id_convivencia";
+        String sql = "DELETE FROM convivencia WHERE id_convivencia = ?";
         try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idConvivencia);

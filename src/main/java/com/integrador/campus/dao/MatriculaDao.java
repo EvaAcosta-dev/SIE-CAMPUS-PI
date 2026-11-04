@@ -32,7 +32,7 @@ public class MatriculaDao {
     }
 
     public boolean actualizarMatricula(Matricula matricula) {
-        String sql = "UPDATE matricula SET id_estudiante=?, id_curso=?, estado=?, observacion=? WHERE id_matricula?";
+        String sql = "UPDATE matricula SET id_estudiante=?, id_curso=?, estado=?, observacion=? WHERE id_matricula = ?";
         try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, matricula.getIdEstudiante());

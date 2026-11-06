@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import com.integrador.campus.config.BDConexion;
+import com.integrador.campus.config.BDConnection;
 import com.integrador.campus.model.Nivel;
 
 public class NivelDao {
@@ -14,7 +14,7 @@ public boolean registrarNivel(Nivel nivel) {
     
         // Implementar la lógica para registrar un nivel en la base de datos
         String sql = "INSERT INTO nivel (nombre_nivel) VALUES (?)";
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             //ps.setInt(1, nivel.getIdNivel());
             ps.setString(1, nivel.getNombreNivel());
@@ -29,7 +29,7 @@ public boolean registrarNivel(Nivel nivel) {
     public List<Nivel> listarNiveles() {
         List<Nivel> niveles = new ArrayList<>();
         String sql = "SELECT id_nivel, nombre_nivel FROM nivel ORDER BY nombre_nivel ASC;";
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
@@ -46,7 +46,7 @@ public boolean registrarNivel(Nivel nivel) {
     //metodo para actualizar los niveles
     public boolean actualizarNivel(Nivel nivel) {   
         String sql = "UPDATE nivel SET nombre_nivel=? WHERE id_nivel=?";
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, nivel.getNombreNivel());
             ps.setInt(2, nivel.getIdNivel());
@@ -60,7 +60,7 @@ public boolean registrarNivel(Nivel nivel) {
     //metodo para eliminar los niveles
     public boolean eliminarNivel(int idNivel) {
         String sql = "DELETE FROM nivel WHERE id_nivel=?";
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idNivel);
             ps.executeUpdate();
@@ -75,7 +75,7 @@ public boolean registrarNivel(Nivel nivel) {
     List<Nivel> lista = new ArrayList<>();
         String sql = "SELECT id_nivel, nombre_nivel FROM nivel WHERE nombre_nivel LIKE ? "
         + "ORDER BY nombre_nivel";
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             String buscar = "%" + value + "%";
             ps.setString(1, buscar);

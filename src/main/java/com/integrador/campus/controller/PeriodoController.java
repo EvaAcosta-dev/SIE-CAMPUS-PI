@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import com.integrador.campus.config.BDConexion;
+import com.integrador.campus.config.BDConnection;
 import com.integrador.campus.dao.AnioLectivoDao;
 import com.integrador.campus.dao.PeriodoDao;
 import com.integrador.campus.model.AnioLectivo;

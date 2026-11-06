@@ -1,6 +1,6 @@
 package com.integrador.campus.dao;
 
-import com.integrador.campus.config.BDConexion;
+import com.integrador.campus.config.BDConnection;
 import com.integrador.campus.model.AnioLectivo;
 import com.integrador.campus.model.Cursos;
 import com.integrador.campus.model.Docente;
@@ -22,7 +22,7 @@ public class CursoDao {
     //metodo para el registro de los cursos
      public boolean registrarCursosQuery(Cursos cursos) {
         String sql = "INSERT INTO curso(nombre_Curso, id_grado, id_anio, id_docente_director, id_jornada) VALUES (?,?,?,?,?)";
-     try(Connection con = BDConexion.getConexion();
+     try(Connection con = BDConnection.getConnection();
         PreparedStatement ps = con.prepareStatement(sql)){
             ps.setString(1, cursos.getNombreCurso());
             ps.setInt(2, cursos.getIdGrado());
@@ -43,7 +43,7 @@ public class CursoDao {
 //metodo para actualizar los cursos
     public boolean actualizarCursosQuery(Cursos cursos) {
         String sql = "UPDATE curso SET nombre_Curso=?, id_grado=?, id_anio=?, id_docente_director=?, id_jornada=? WHERE id_curso=?";
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, cursos.getNombreCurso());
             ps.setInt(2, cursos.getIdGrado());
@@ -72,7 +72,7 @@ public class CursoDao {
                    + "LEFT JOIN grado g ON c.id_grado = g.id_grado "
                    + "LEFT JOIN jornada j ON c.id_jornada = j.id_jornada "
                    + "LEFT JOIN anio_lectivo al ON c.id_anio = al.id_anio";
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
@@ -116,7 +116,7 @@ public class CursoDao {
         + "OR j.nombre_jornada LIKE ? "
         + "ORDER BY c.id_curso DESC";
 
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
              String buscar = "%" + value + "%";
 
@@ -147,7 +147,7 @@ public class CursoDao {
     //metodo para eliminar cursos
     public boolean eliminarCurso(int idCurso) {
         String sql = "DELETE FROM curso WHERE id_curso=?";
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idCurso);
             int filasAfectadas = ps.executeUpdate(); // Ejecutar DELETE

@@ -2,20 +2,12 @@ package com.integrador.campus.view;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-//import com.formdev.flatlaf.FlatLightLaf;
-
 import java.awt.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.integrador.campus.Util.Permisos;
-import com.integrador.campus.view.Modulo.UsuarioPanel;
-import com.integrador.campus.view.Modulo.AcademicoPanel;
-import com.integrador.campus.view.Modulo.CursoMateriaPanel;
-import com.integrador.campus.view.Modulo.EstudiantePanel;
-import com.integrador.campus.view.Modulo.DocentePanel;
-import com.integrador.campus.view.Modulo.NotificacionInternaPanel;
-import com.integrador.campus.view.Modulo.AcudientePanel;
+import com.integrador.campus.view.Modulo.*;
 
 public class DashboardFrame extends JFrame {
     private final Color azulOscuro = new Color(25, 45, 80);
@@ -35,13 +27,18 @@ public class DashboardFrame extends JFrame {
     private final EstudiantePanel estudiantePanel = new EstudiantePanel();
     private final UsuarioPanel usuarioPanel = new UsuarioPanel();
     private final CursoMateriaPanel cursosMateriasPanel = new CursoMateriaPanel();
-    private final AcademicoPanel academicoPanel=new AcademicoPanel();
-
-   
+    private final AcademicoPanel academicoPanel = new AcademicoPanel();
     private final DocentePanel docentePanel = new DocentePanel();
     private final NotificacionInternaPanel notificacionInternaPanel;
     private final AcudientePanel acudientePanel = new AcudientePanel();
 
+    // Nuevos módulos
+    private final MatriculaPanel matriculaPanel = new MatriculaPanel();
+    private final NotasPanel notasPanel = new NotasPanel();
+    private final BoletinesPanel boletinesPanel = new BoletinesPanel();
+    private final AsignacionDocentePanel asignacionDocentePanel = new AsignacionDocentePanel();
+    private final AsistenciaPanel asistenciaPanel = new AsistenciaPanel();
+    private final ConvivenciaPanel convivenciaPanel = new ConvivenciaPanel();
 
     public DashboardFrame(String nombreUsuario, String rol, int idUsuario) {
         this.rol = rol;
@@ -54,16 +51,13 @@ public class DashboardFrame extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        // Menú lateral
         JPanel menu = crearMenu(rol);
         add(menu, BorderLayout.WEST);
 
-        // Contenedor central
         JPanel principal = new JPanel(new BorderLayout(0, 22));
         principal.setBackground(fondo);
         principal.setBorder(new EmptyBorder(25, 30, 25, 30));
 
-        // Encabezado
         JPanel encabezado = new JPanel(new BorderLayout());
         encabezado.setOpaque(false);
 
@@ -75,7 +69,6 @@ public class DashboardFrame extends JFrame {
         lblTitulo.setFont(new Font("SansSerif", Font.BOLD, 27));
         lblTitulo.setForeground(azulOscuro);
 
-        
         textos.add(lblTitulo);
         textos.add(Box.createVerticalStrut(7));
 
@@ -91,7 +84,6 @@ public class DashboardFrame extends JFrame {
         encabezado.add(textos, BorderLayout.WEST);
         encabezado.add(lblUsuario, BorderLayout.EAST);
 
-        // Área que cambia según la opción seleccionada
         contenido = new JPanel(new BorderLayout(0, 20));
         contenido.setOpaque(false);
 
@@ -107,7 +99,7 @@ public class DashboardFrame extends JFrame {
         JPanel menu = new JPanel();
         menu.setBackground(azulOscuro);
         menu.setPreferredSize(new Dimension(235, 0));
-        menu.setBorder(new EmptyBorder(15, 15, 20, 15));//MARGEN SUPERIOR
+        menu.setBorder(new EmptyBorder(15, 15, 20, 15));
         menu.setLayout(new BoxLayout(menu, BoxLayout.Y_AXIS));
 
         JLabel logo = new JLabel("CAMPUS");
@@ -121,9 +113,9 @@ public class DashboardFrame extends JFrame {
         lema.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         menu.add(logo);
-        menu.add(Box.createVerticalStrut(3));//(Espacio entre CAMPUS y Gestión escolar)
+        menu.add(Box.createVerticalStrut(3));
         menu.add(lema);
-        menu.add(Box.createVerticalStrut(25));// (Espacio antes de MENÚ PRINCIPAL)
+        menu.add(Box.createVerticalStrut(25));
 
         JLabel etiqueta = new JLabel("MENÚ PRINCIPAL");
         etiqueta.setForeground(new Color(170, 190, 220));
@@ -131,14 +123,14 @@ public class DashboardFrame extends JFrame {
         etiqueta.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         menu.add(etiqueta);
-        menu.add(Box.createVerticalStrut(8));//(Espacio antes del primer botón)
+        menu.add(Box.createVerticalStrut(8));
 
         agregarOpcion(menu, "Inicio");
         agregarOpcion(menu, "Usuarios");
         agregarOpcion(menu, "Estudiantes");
         agregarOpcion(menu, "Docentes");
-        agregarOpcion(menu, "Acudientes");//padres y relacion estudiante
-        agregarOpcion(menu, "Academico");//ano escolar, grados, jornadas, niveles
+        agregarOpcion(menu, "Acudientes");
+        agregarOpcion(menu, "Academico");
         agregarOpcion(menu, "Cursos y materias");
         agregarOpcion(menu, "Matrículas");
         agregarOpcion(menu, "Asignaciones docentes");
@@ -158,45 +150,34 @@ public class DashboardFrame extends JFrame {
                     "Confirmar salida",
                     JOptionPane.YES_NO_OPTION
             );
-
             if (respuesta == JOptionPane.YES_OPTION) {
                 dispose();
-                // Aquí se reabrirá el Login luego de cerrar sesion
-                 LoginFrame loginFrame = new LoginFrame();
-                  loginFrame.setVisible(true);
-
+                LoginFrame loginFrame = new LoginFrame();
+                loginFrame.setVisible(true);
             }
         });
 
         menu.add(salir);
-
-        // El menú inicial muestra únicamente Inicio.
-        // Los permisos reales deben verificarse también
-        // en el controlador y en las operaciones de datos.
         aplicarPermisosVisuales(rol);
-
         return menu;
     }
 
-        private void agregarOpcion(JPanel menu, String nombre) {
+    private void agregarOpcion(JPanel menu, String nombre) {
         JButton boton = crearBotonMenu(nombre);
-
         boton.addActionListener(e -> {
                 if ("Inicio".equals(nombre)) {
-                lblTitulo.setText("Panel principal");
-                mostrarInicio();
+                    lblTitulo.setText("Panel principal");
+                    mostrarInicio();
                 } else {
-                mostrarModulo(nombre);
+                    mostrarModulo(nombre);
                 }
         });
-
         Component espacio = Box.createVerticalStrut(5);
         espacios.put(nombre, espacio);
-
         botonesMenu.put(nombre, boton);
         menu.add(boton);
         menu.add(espacio);
-        }
+    }
 
     private JButton crearBotonMenu(String nombre) {
         JButton boton = new JButton(nombre);
@@ -204,9 +185,7 @@ public class DashboardFrame extends JFrame {
         boton.setForeground(blanco);
         boton.setBackground(azulOscuro);
         boton.setHorizontalAlignment(SwingConstants.LEFT);
-        boton.setMaximumSize(new Dimension(
-                Integer.MAX_VALUE, 32
-        ));
+        boton.setMaximumSize(new Dimension(Integer.MAX_VALUE, 32));
         boton.setPreferredSize(new Dimension(200, 32));
         boton.setBorder(new EmptyBorder(6, 12, 6, 8));
         boton.setFocusPainted(false);
@@ -218,67 +197,40 @@ public class DashboardFrame extends JFrame {
             public void mouseEntered(java.awt.event.MouseEvent e) {
                 boton.setBackground(azulMedio);
             }
-
             @Override
             public void mouseExited(java.awt.event.MouseEvent e) {
                 boton.setBackground(azulOscuro);
             }
         });
-
         return boton;
     }
 
     private void mostrarInicio() {
         contenido.removeAll();
-
         JPanel tarjetas = new JPanel(new GridLayout(2, 2, 18, 18));
         tarjetas.setOpaque(false);
 
-        tarjetas.add(crearTarjeta(
-                "Estudiantes", "—",
-                "Total registrado en el sistema"
-        ));
-        tarjetas.add(crearTarjeta(
-                "Docentes", "—",
-                "Personal docente registrado"
-        ));
-        tarjetas.add(crearTarjeta(
-                "Cursos", "—",
-                "Cursos académicos configurados"
-        ));
-        tarjetas.add(crearTarjeta(
-                "Asignaturas", "—",
-                "Materias registradas"
-        ));
+        tarjetas.add(crearTarjeta("Estudiantes", "—", "Total registrado en el sistema"));
+        tarjetas.add(crearTarjeta("Docentes", "—", "Personal docente registrado"));
+        tarjetas.add(crearTarjeta("Cursos", "—", "Cursos académicos configurados"));
+        tarjetas.add(crearTarjeta("Asignaturas", "—", "Materias registradas"));
 
         JPanel bienvenida = new JPanel();
-        bienvenida.setLayout(new BoxLayout(
-                bienvenida, BoxLayout.Y_AXIS
-        ));
+        bienvenida.setLayout(new BoxLayout(bienvenida, BoxLayout.Y_AXIS));
         bienvenida.setBackground(blanco);
         bienvenida.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(
-                        new Color(228, 233, 241)
-                ),
+                BorderFactory.createLineBorder(new Color(228, 233, 241)),
                 new EmptyBorder(22, 25, 22, 25)
         ));
 
-        JLabel tituloBienvenida = new JLabel(
-                "Bienvenido a Campus"
-        );
-        tituloBienvenida.setFont(
-                new Font("SansSerif", Font.BOLD, 20)
-        );
+        JLabel tituloBienvenida = new JLabel("Bienvenido a Campus");
+        tituloBienvenida.setFont(new Font("SansSerif", Font.BOLD, 20));
         tituloBienvenida.setForeground(azulOscuro);
 
         JLabel descripcion = new JLabel(
-                "<html>Administra la información escolar desde un "
-                + "solo lugar.<br>Selecciona un módulo en el menú "
-                + "lateral para comenzar.</html>"
+                "<html>Administra la información escolar desde un solo lugar.<br>Selecciona un módulo en el menú lateral para comenzar.</html>"
         );
-        descripcion.setFont(
-                new Font("SansSerif", Font.PLAIN, 14)
-        );
+        descripcion.setFont(new Font("SansSerif", Font.PLAIN, 14));
         descripcion.setForeground(texto);
 
         bienvenida.add(tituloBienvenida);
@@ -292,42 +244,26 @@ public class DashboardFrame extends JFrame {
         contenido.repaint();
     }
 
-    private JPanel crearTarjeta(
-            String titulo, String valor, String descripcion) {
-
+    private JPanel crearTarjeta(String titulo, String valor, String descripcion) {
         JPanel tarjeta = new JPanel();
-        tarjeta.setLayout(new BoxLayout(
-                tarjeta, BoxLayout.Y_AXIS
-        ));
+        tarjeta.setLayout(new BoxLayout(tarjeta, BoxLayout.Y_AXIS));
         tarjeta.setBackground(blanco);
         tarjeta.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(
-                        new Color(228, 233, 241)
-                ),
+                BorderFactory.createLineBorder(new Color(228, 233, 241)),
                 new EmptyBorder(20, 22, 20, 22)
         ));
 
         JLabel lblNombre = new JLabel(titulo);
-        lblNombre.setFont(
-                new Font("SansSerif", Font.BOLD, 15)
-        );
+        lblNombre.setFont(new Font("SansSerif", Font.BOLD, 15));
         lblNombre.setForeground(texto);
 
         JLabel lblValor = new JLabel(valor);
-        lblValor.setFont(
-                new Font("SansSerif", Font.BOLD, 32)
-        );
+        lblValor.setFont(new Font("SansSerif", Font.BOLD, 32));
         lblValor.setForeground(azulMedio);
 
-        JLabel lblDescripcion = new JLabel(
-                "<html>" + descripcion + "</html>"
-        );
-        lblDescripcion.setFont(
-                new Font("SansSerif", Font.PLAIN, 12)
-        );
-        lblDescripcion.setForeground(
-                new Color(115, 125, 140)
-        );
+        JLabel lblDescripcion = new JLabel("<html>" + descripcion + "</html>");
+        lblDescripcion.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        lblDescripcion.setForeground(new Color(115, 125, 140));
 
         tarjeta.add(lblNombre);
         tarjeta.add(Box.createVerticalStrut(18));
@@ -339,12 +275,8 @@ public class DashboardFrame extends JFrame {
     }
 
     private void mostrarModulo(String nombre) {
-        
-        // Segunda barrera, por si alguien llega sin pasar por el botón
         if (!Permisos.puedeAcceder(rol, nombre)) {
-            JOptionPane.showMessageDialog(this,
-                    "No tienes permiso para acceder a este módulo.",
-                    "Acceso denegado", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "No tienes permiso para acceder a este módulo.", "Acceso denegado", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -358,14 +290,12 @@ public class DashboardFrame extends JFrame {
             case "Cursos y materias":
                 contenido.add(cursosMateriasPanel, BorderLayout.CENTER);
                 break;
-                case "Academico":
-                        contenido.add(academicoPanel,BorderLayout.CENTER);
+            case "Academico":
+                contenido.add(academicoPanel, BorderLayout.CENTER);
                 break; 
-
-                case "Estudiantes":
+            case "Estudiantes":
                 contenido.add(estudiantePanel, BorderLayout.CENTER);
                 break;
-
             case "Docentes":
                 contenido.add(docentePanel, BorderLayout.CENTER);
                 break;
@@ -374,7 +304,25 @@ public class DashboardFrame extends JFrame {
                 break;
             case "Notificaciones":
                 contenido.add(notificacionInternaPanel, BorderLayout.CENTER);
-                break; 
+                break;
+            case "Matrículas":
+                contenido.add(matriculaPanel, BorderLayout.CENTER);
+                break;
+            case "Asignaciones docentes":
+                contenido.add(asignacionDocentePanel, BorderLayout.CENTER);
+                break;
+            case "Notas":
+                contenido.add(notasPanel, BorderLayout.CENTER);
+                break;
+            case "Boletines":
+                contenido.add(boletinesPanel, BorderLayout.CENTER);
+                break;
+            case "Asistencia":
+                contenido.add(asistenciaPanel, BorderLayout.CENTER);
+                break;
+            case "Convivencia":
+                contenido.add(convivenciaPanel, BorderLayout.CENTER);
+                break;
             default:
                 mostrarInicio();
                 return;
@@ -387,40 +335,25 @@ public class DashboardFrame extends JFrame {
         }
     }
 
-
     private void aplicarPermisosVisuales(String rol) {
         for (Map.Entry<String, JButton> entrada : botonesMenu.entrySet()) {
             boolean permitido = Permisos.puedeAcceder(rol, entrada.getKey());
             entrada.getValue().setVisible(permitido);
-
             Component espacio = espacios.get(entrada.getKey());
             if (espacio != null) {
                 espacio.setVisible(permitido);
             }
         }
-}
+    }
 
     private String escapar(String texto) {
-        if (texto == null) {
-            return "";
-        }
-        return texto.replace("&", "&amp;")
-                    .replace("<", "&lt;")
-                    .replace(">", "&gt;")
-                    .replace("\"", "&quot;")
-                    .replace("'", "&#39;");
+        if (texto == null) return "";
+        return texto.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;").replace("'", "&#39;");
     }
 
-    public UsuarioPanel getUsuarioPanel() {
-        return usuarioPanel;
-    }
-    public EstudiantePanel getEstudiantePanel() {
-        return estudiantePanel;
-    }
-    public DocentePanel getDocentePanel() {
-        return docentePanel;
-    }
-    public AcudientePanel getAcudientePanel() {
-        return acudientePanel;
-    }
+    public UsuarioPanel getUsuarioPanel() { return usuarioPanel; }
+    public EstudiantePanel getEstudiantePanel() { return estudiantePanel; }
+    public DocentePanel getDocentePanel() { return docentePanel; }
+    public AcudientePanel getAcudientePanel() { return acudientePanel; }
+
 }

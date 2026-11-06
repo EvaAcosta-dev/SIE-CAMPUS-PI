@@ -8,13 +8,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.integrador.campus.config.BDConexion;
+import com.integrador.campus.config.BDConnection;
 import com.integrador.campus.model.Periodo;
 public class PeriodoDao {
     // Registrar periodo
     public boolean registrarPeriodo(Periodo periodo) {
         String sql = "INSERT INTO periodos (nombre_periodo, id_anio, orden, fecha_inicio, fecha_fin, activo) VALUES (?, ?, ?, ?, ?, ?)";
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             
             ps.setString(1, periodo.getNombrePeriodo());
@@ -39,7 +39,7 @@ public class PeriodoDao {
                      "FROM periodos p " +
                      "INNER JOIN anio_lectivo a ON p.id_anio = a.id_anio " +
                      "ORDER BY a.anio DESC, p.orden ASC";
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             
@@ -69,7 +69,7 @@ public class PeriodoDao {
     // Método para actualizar periodo
     public boolean actualizarPeriodo(Periodo periodo) {
         String sql = "UPDATE periodos SET nombre_periodo=?, id_anio=?, orden=?, fecha_inicio=?, fecha_fin=?, activo=? WHERE id_periodo=?";
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             
             ps.setString(1, periodo.getNombrePeriodo());
@@ -91,7 +91,7 @@ public class PeriodoDao {
     // Método para eliminar periodo
     public boolean eliminarPeriodo(int idPeriodo) {
         String sql = "DELETE FROM periodos WHERE id_periodo=?";
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idPeriodo);
             ps.executeUpdate();
@@ -113,7 +113,7 @@ public class PeriodoDao {
                      "  AND (? = 0 OR a.anio = ?) " +
                      "ORDER BY a.anio DESC, p.orden ASC";
 
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             if (nombre != null && !nombre.trim().isEmpty()) {
                 ps.setString(1, nombre.trim());

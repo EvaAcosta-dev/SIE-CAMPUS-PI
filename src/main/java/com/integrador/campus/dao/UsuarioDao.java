@@ -1,6 +1,6 @@
 package com.integrador.campus.dao;
 
-import com.integrador.campus.config.BDConexion;
+import com.integrador.campus.config.BDConnection;
 import com.integrador.campus.model.Rol;
 import com.integrador.campus.model.Usuario;
 import com.integrador.campus.Util.EncriptarPass;
@@ -21,7 +21,7 @@ public class UsuarioDao {
         + "JOIN rol r ON u.id_rol = r.id_rol "
         + "WHERE u.Correo = ? AND u.activo = 1";
 
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, correo);
@@ -65,7 +65,7 @@ public class UsuarioDao {
             return false;
         }
 
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, u.getNombre());
@@ -99,7 +99,7 @@ public List<Usuario> listaUsuario(String value) throws SQLException {
             + "OR r.nombre_rol LIKE ? "
             + "ORDER BY u.id_usuario ASC";
 
-    try (Connection con = BDConexion.getConexion();
+    try (Connection con = BDConnection.getConnection();
          PreparedStatement ps = con.prepareStatement(sql)) {
 
         String buscar = "%" + value + "%";
@@ -140,7 +140,7 @@ public List<Usuario> listaUsuario(String value) throws SQLException {
                  "INNER JOIN rol r ON u.id_rol = r.id_rol " +
                  "ORDER BY u.id_usuario DESC";
 
-    try (Connection con = BDConexion.getConexion();
+    try (Connection con = BDConnection.getConnection();
          PreparedStatement ps = con.prepareStatement(sql);
          ResultSet rs = ps.executeQuery()) {
 
@@ -170,7 +170,7 @@ public List<Usuario> listaUsuario(String value) throws SQLException {
         List<Rol> lista = new ArrayList<>();
         String sql = "SELECT id_rol, nombre_rol FROM rol ORDER BY id_rol ASC";
 
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
@@ -191,7 +191,7 @@ public List<Usuario> listaUsuario(String value) throws SQLException {
                    + (u.getContrasena() != null && !u.getContrasena().trim().isEmpty() ? ", Contrasena = ?" : "")
                    + " WHERE id_usuario = ?";
 
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, u.getNombre());
@@ -219,7 +219,7 @@ public List<Usuario> listaUsuario(String value) throws SQLException {
     //  ELIMINAR 
     public boolean eliminarUsuario(int id) {
         String sql = "DELETE FROM usuario WHERE id_usuario = ?";
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, id);
             return ps.executeUpdate() > 0;
@@ -235,7 +235,7 @@ public List<Usuario> listaUsuario(String value) throws SQLException {
             "UPDATE usuario SET activo = ? "
             + "WHERE id_usuario = ?";
 
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setBoolean(1, activo);

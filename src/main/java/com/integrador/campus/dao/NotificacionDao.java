@@ -1,6 +1,6 @@
 package com.integrador.campus.dao;
 
-import com.integrador.campus.config.BDConexion;
+import com.integrador.campus.config.BDConnection;
 import com.integrador.campus.model.Notificacion;
 import com.integrador.campus.model.Rol;
 import com.integrador.campus.model.Usuario;
@@ -35,7 +35,7 @@ public class NotificacionDao {
 
         // try-with-resources abre los recursos necesarios y los cierra
         // automáticamente cuando termina la consulta.
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
@@ -60,7 +60,7 @@ public class NotificacionDao {
         // Lista que agrupará todos los usuarios devueltos por la consulta.
         List<Usuario> usuarios = new ArrayList<>();
 
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             if (idRol != null) {
                 // Reemplaza el marcador ? cuando la publicación fue filtrada por rol.
@@ -90,7 +90,7 @@ public class NotificacionDao {
         String sql = "INSERT INTO notificaciones "
                 + "(id_usuario_destino, titulo, mensaje, tipo_evento) "
                 + "VALUES (?, ?, ?, ?)";
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             // Reemplaza los marcadores ? con los datos del objeto recibido.
             ps.setInt(1, notificacion.getIdUsuarioDestino());
@@ -110,7 +110,7 @@ public class NotificacionDao {
         String sql = "INSERT INTO notificaciones "
                 + "(id_usuario_destino, titulo, mensaje, tipo_evento) "
                 + "VALUES (?, ?, ?, ?)";
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             // Desactiva la confirmación automática para que todas se guarden juntas.
             con.setAutoCommit(false);
@@ -146,7 +146,7 @@ public class NotificacionDao {
                 + "ORDER BY leido ASC, fecha_envio DESC";
         // Lista que representa las notificaciones mostradas en la bandeja.
         List<Notificacion> notificaciones = new ArrayList<>();
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             // Limita los resultados al propietario de la bandeja actual.
             ps.setInt(1, idUsuarioDestino);
@@ -175,7 +175,7 @@ public class NotificacionDao {
             throws SQLException {
         String sql = "UPDATE notificaciones SET leido = TRUE "
                 + "WHERE id_notificacion = ? AND id_usuario_destino = ? AND leido = FALSE";
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             // Solo permite marcar una fila cuando coincide notificación y usuario.
             ps.setInt(1, idNotificacion);
@@ -199,7 +199,7 @@ public class NotificacionDao {
         // Lista exclusivamente para destinatarios que pueden recibir correo.
         List<Usuario> destinatarios = new ArrayList<>();
 
-        try (Connection con = BDConexion.getConexion();
+        try (Connection con = BDConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             if (idRol != null) {
                 // Agrega el filtro de rol al marcador de la consulta.

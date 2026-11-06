@@ -1,6 +1,6 @@
 package com.integrador.campus.dao;
 
-import com.integrador.campus.config.BDConnection;
+import com.integrador.campus.config.BDConexion;
 import com.integrador.campus.model.Asistencia;
 
 import java.sql.Connection;
@@ -16,7 +16,7 @@ public class AsistenciaDao {
 
     public boolean registrarAsistencia(Asistencia a) {
         String sql = "INSERT INTO asistencia (id_estudiante, id_materia, id_curso, fecha_clase, estado, observacion) VALUES (?, ?, ?, ?, ?, ?)";
-        try (Connection con = BDConnection.getConnection();
+        try(Connection con = BDConexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, a.getIdEstudiante());
             ps.setInt(2, a.getIdMateria());
@@ -34,7 +34,7 @@ public class AsistenciaDao {
 
     public boolean actualizarAsistencia(Asistencia a) {
         String sql = "UPDATE asistencia SET estado=?, observacion=? WHERE id_asistencia = ?";
-        try (Connection con = BDConnection.getConnection();
+        try(Connection con = BDConexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, a.getEstado());
             ps.setString(2, a.getObservacion());
@@ -55,7 +55,7 @@ public class AsistenciaDao {
                    + "INNER JOIN materia m ON a.id_materia = m.id_materia "
                    + "WHERE a.id_estudiante = ? AND a.id_materia = ? AND a.id_curso = ? "
                    + "ORDER BY a.fecha_clase DESC";
-        try (Connection con = BDConnection.getConnection();
+        try(Connection con = BDConexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idEstudiante);
             ps.setInt(2, idMateria);
@@ -82,7 +82,7 @@ public class AsistenciaDao {
 
     public boolean eliminarAsistencia(int idAsistencia) {
         String sql = "DELETE FROM asistencia WHERE id_asistencia = ?";
-        try (Connection con = BDConnection.getConnection();
+        try(Connection con = BDConexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idAsistencia);
             return ps.executeUpdate() > 0;

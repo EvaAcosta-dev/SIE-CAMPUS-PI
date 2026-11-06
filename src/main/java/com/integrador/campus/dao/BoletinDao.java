@@ -1,6 +1,6 @@
 package com.integrador.campus.dao;
 
-import com.integrador.campus.config.BDConnection;
+import com.integrador.campus.config.BDConexion;
 import com.integrador.campus.model.Boletin;
 
 import java.sql.Connection;
@@ -16,7 +16,7 @@ public class BoletinDao {
 
     public boolean generarBoletin(Boletin b) {
         String sql = "INSERT INTO boletin (id_estudiante, id_curso, anio_lectivo, periodo, promedio_general, aprobadas, reprobadas, estado_boletin) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection con = BDConnection.getConnection();
+        try(Connection con = BDConexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, b.getIdEstudiante());
             ps.setInt(2, b.getIdCurso());
@@ -43,7 +43,7 @@ public class BoletinDao {
                    + "INNER JOIN curso co ON b.id_curso = co.id_curso "
                    + "WHERE b.id_estudiante = ? "
                    + "ORDER BY b.anio_lectivo DESC, b.periodo";
-        try (Connection con = BDConnection.getConnection();
+        try(Connection con = BDConexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idEstudiante);
             try (ResultSet rs = ps.executeQuery()) {
@@ -70,7 +70,7 @@ public class BoletinDao {
 
     public boolean actualizarEstadoBoletin(int idBoletin, String estado) {
         String sql = "UPDATE boletin SET estado_boletin = ? WHERE id_boletin = ?";
-        try (Connection con = BDConnection.getConnection();
+        try(Connection con = BDConexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, estado);
             ps.setInt(2, idBoletin);
@@ -83,7 +83,7 @@ public class BoletinDao {
 
     public boolean eliminarBoletin(int idBoletin) {
         String sql = "DELETE FROM boletin WHERE id_boletin = ?";
-        try (Connection con = BDConnection.getConnection();
+        try(Connection con = BDConexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idBoletin);
             return ps.executeUpdate() > 0;

@@ -1,6 +1,6 @@
 package com.integrador.campus.dao;
 
-import com.integrador.campus.config.BDConnection;
+import com.integrador.campus.config.BDConexion;
 import com.integrador.campus.model.AsignacionDocente;
 
 import java.sql.Connection;
@@ -16,7 +16,7 @@ public class AsignacionDocenteDao {
 
     public boolean registrarAsignacion(AsignacionDocente a) {
         String sql = "INSERT INTO asignacion_docente (id_docente, id_materia, id_curso, anio_lectivo, estado) VALUES (?, ?, ?, ?, ?)";
-        try (Connection con = BDConnection.getConnection();
+        try(Connection con = BDConexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, a.getIdDocente());
             ps.setInt(2, a.getIdMateria());
@@ -33,7 +33,7 @@ public class AsignacionDocenteDao {
 
     public boolean actualizarAsignacion(AsignacionDocente a) {
         String sql = "UPDATE asignacion_docente SET id_docente=?, id_materia=?, id_curso=?, anio_lectivo=?, estado=? WHERE id_asignacion = ?";
-        try (Connection con = BDConnection.getConnection();
+        try(Connection con = BDConexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, a.getIdDocente());
             ps.setInt(2, a.getIdMateria());
@@ -60,7 +60,7 @@ public class AsignacionDocenteDao {
                    + (idDocente > 0 ? "WHERE a.id_docente = ? " : "")
                    + (anioLectivo > 0 ? (idDocente > 0 ? "AND " : "WHERE ") + "a.anio_lectivo = ? " : "")
                    + "ORDER BY co.nombre_curso, m.nombre_materia";
-        try (Connection con = BDConnection.getConnection();
+        try(Connection con = BDConexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
             int idx = 1;
             if (idDocente > 0) ps.setInt(idx++, idDocente);
@@ -86,7 +86,7 @@ public class AsignacionDocenteDao {
 
     public boolean eliminarAsignacion(int idAsignacion) {
         String sql = "DELETE FROM asignacion_docente WHERE id_asignacion = ?";
-        try (Connection con = BDConnection.getConnection();
+        try(Connection con = BDConexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idAsignacion);
             return ps.executeUpdate() > 0;

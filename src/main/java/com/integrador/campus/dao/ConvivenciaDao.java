@@ -1,6 +1,6 @@
 package com.integrador.campus.dao;
 
-import com.integrador.campus.config.BDConnection;
+import com.integrador.campus.config.BDConexion;
 import com.integrador.campus.model.Convivencia;
 
 import java.sql.Connection;
@@ -16,7 +16,7 @@ public class ConvivenciaDao {
 
     public boolean registrarConvivencia(Convivencia c) {
         String sql = "INSERT INTO convivencia (id_estudiante, id_docente, fecha_reporte, tipo_falta, observacion, medida_disciplinaria, estado) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try (Connection con = BDConnection.getConnection();
+        try(Connection con = BDConexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, c.getIdEstudiante());
             ps.setInt(2, c.getIdDocente());
@@ -35,7 +35,7 @@ public class ConvivenciaDao {
 
     public boolean actualizarConvivencia(Convivencia c) {
         String sql = "UPDATE convivencia SET tipo_falta=?, observacion=?, medida_disciplinaria=?, estado=? WHERE id_convivencia = ?";
-        try (Connection con = BDConnection.getConnection();
+        try(Connection con = BDConexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, c.getTipoFalta());
             ps.setString(2, c.getObservacion());
@@ -59,7 +59,7 @@ public class ConvivenciaDao {
                    + "INNER JOIN docente d ON c.id_docente = d.id_docente "
                    + "WHERE c.id_estudiante = ? "
                    + "ORDER BY c.fecha_reporte DESC";
-        try (Connection con = BDConnection.getConnection();
+        try(Connection con = BDConexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idEstudiante);
             try (ResultSet rs = ps.executeQuery()) {
@@ -85,7 +85,7 @@ public class ConvivenciaDao {
 
     public boolean eliminarConvivencia(int idConvivencia) {
         String sql = "DELETE FROM convivencia WHERE id_convivencia = ?";
-        try (Connection con = BDConnection.getConnection();
+        try(Connection con = BDConexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idConvivencia);
             return ps.executeUpdate() > 0;

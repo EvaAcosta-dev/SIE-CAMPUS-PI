@@ -1,6 +1,6 @@
 package com.integrador.campus.dao;
 
-import com.integrador.campus.config.BDConnection;
+import com.integrador.campus.config.BDConexion;
 import com.integrador.campus.model.Calificacion;
 
 import java.sql.Connection;
@@ -16,7 +16,7 @@ public class CalificacionDao {
 
     public boolean registrarCalificacion(Calificacion cal) {
         String sql = "INSERT INTO calificacion (id_estudiante, id_materia, id_curso, nota, periodo, anio_lectivo, observacion) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try (Connection con = BDConnection.getConnection();
+        try(Connection con = BDConexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, cal.getIdEstudiante());
             ps.setInt(2, cal.getIdMateria());
@@ -35,7 +35,7 @@ public class CalificacionDao {
 
     public boolean actualizarCalificacion(Calificacion cal) {
         String sql = "UPDATE calificacion SET nota=?, periodo=?, observacion=? WHERE id_calificacion = ?";
-        try (Connection con = BDConnection.getConnection();
+        try(Connection con = BDConexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setDouble(1, cal.getNota());
             ps.setString(2, cal.getPeriodo());
@@ -60,7 +60,7 @@ public class CalificacionDao {
                    + "INNER JOIN curso co ON c.id_curso = co.id_curso "
                    + "WHERE c.id_estudiante = ? AND c.anio_lectivo = ? "
                    + "ORDER BY m.nombre_materia, c.periodo";
-        try (Connection con = BDConnection.getConnection();
+        try(Connection con = BDConexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idEstudiante);
             ps.setInt(2, anioLectivo);
@@ -94,7 +94,7 @@ public class CalificacionDao {
                    + "INNER JOIN estudiante e ON c.id_estudiante = e.id_estudiante "
                    + "WHERE c.id_materia = ? AND c.id_curso = ? AND c.anio_lectivo = ? "
                    + "ORDER BY e.apellido, e.nombre";
-        try (Connection con = BDConnection.getConnection();
+        try(Connection con = BDConexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idMateria);
             ps.setInt(2, idCurso);
@@ -122,7 +122,7 @@ public class CalificacionDao {
 
     public boolean eliminarCalificacion(int idCalificacion) {
         String sql = "DELETE FROM calificacion WHERE id_calificacion = ?";
-        try (Connection con = BDConnection.getConnection();
+        try(Connection con = BDConexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idCalificacion);
             return ps.executeUpdate() > 0;

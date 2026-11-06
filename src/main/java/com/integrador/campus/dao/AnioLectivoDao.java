@@ -10,7 +10,7 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
-import com.integrador.campus.config.BDConnection;
+import com.integrador.campus.config.BDConexion;
 import com.integrador.campus.model.AnioLectivo;
 import com.integrador.campus.model.Cursos;
 import com.integrador.campus.model.Nivel;
@@ -28,7 +28,7 @@ public class AnioLectivoDao {
     // Registrar año escolar
     public boolean registrarAnioLectivo(AnioLectivo anioLectivo){
         String sql ="INSERT INTO anio_lectivo (anio,fecha_inicio,fecha_fin,estado) VALUES (?,?,?,?)";
-        try(Connection con = BDConnection.getConnection();
+        try(Connection con = BDConexion.getConexion();
             PreparedStatement ps = con.prepareStatement(sql)){  
             ps.setInt(1,anioLectivo.getAnio());
             ps.setDate(2, java.sql.Date.valueOf(anioLectivo.getFechaInicio()));
@@ -45,7 +45,7 @@ public class AnioLectivoDao {
     // Método actualizar Año lectivo
     public boolean actualizaAnioLectivo(AnioLectivo anioLectivo){
         String sql= "UPDATE anio_lectivo SET anio=?,fecha_inicio=?,fecha_fin=?,estado=? WHERE id_anio=?";
-        try (Connection con = BDConnection.getConnection();
+        try(Connection con = BDConexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
              
             ps.setInt(1, anioLectivo.getAnio());
@@ -66,7 +66,7 @@ public class AnioLectivoDao {
     // Eliminar año
     public boolean eliminarAnioLectivo (int idAnio){
         String sql= "DELETE FROM anio_lectivo WHERE id_anio=?";
-        try (Connection con = BDConnection.getConnection();
+        try(Connection con = BDConexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idAnio);
             int filasAfectadas = ps.executeUpdate();
@@ -88,7 +88,7 @@ public class AnioLectivoDao {
                    + "OR estado LIKE ? "
                    + "ORDER BY anio DESC"; 
                    
-        try (Connection con = BDConnection.getConnection();
+        try(Connection con = BDConexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
             
             String buscar = "%" + value + "%";
@@ -123,7 +123,7 @@ public class AnioLectivoDao {
             "UPDATE anio_lectivo SET estado = ? "
             + "WHERE id_anio = ?";
 
-        try (Connection con = BDConnection.getConnection();
+        try(Connection con = BDConexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, estado);
@@ -145,7 +145,7 @@ public class AnioLectivoDao {
                + "FROM anio_lectivo "
                + "ORDER BY anio ASC";
 
-    try (Connection con = BDConnection.getConnection();
+        try(Connection con = BDConexion.getConexion();
          PreparedStatement ps = con.prepareStatement(sql);
          ResultSet rs = ps.executeQuery()) {
 

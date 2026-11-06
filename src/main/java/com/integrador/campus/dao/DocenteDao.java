@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.integrador.campus.Util.EncriptarPass;
-import com.integrador.campus.config.BDConnection;
+import com.integrador.campus.config.BDConexion;
 import com.integrador.campus.model.Docente;
 
 public class DocenteDao {
@@ -21,7 +21,7 @@ public class DocenteDao {
         String sql = "SELECT id_docente, nombre, apellido "
                    + "FROM docente ORDER BY nombre, apellido";
 
-        try (Connection con = BDConnection.getConnection();
+        try(Connection con = BDConexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
@@ -55,7 +55,7 @@ public class DocenteDao {
 
         List<Docente> lista = new ArrayList<>();
 
-        try (Connection con = BDConnection.getConnection();
+        try(Connection con = BDConexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             if (filtrar) {
@@ -83,7 +83,7 @@ public class DocenteDao {
 
     // Crea el usuario (rol DOCENTE) y el docente en una transacción
     public void registrar(Docente doc) throws SQLException {
-        try (Connection con = BDConnection.getConnection()) {
+        try(Connection con = BDConexion.getConexion();
             con.setAutoCommit(false);
             try {
                 int idRol = obtenerIdRol(con, "DOCENTE");
@@ -131,7 +131,7 @@ public class DocenteDao {
 
     // Actualiza docente y usuario. Si la clave viene vacía, se conserva.
     public void actualizar(Docente doc) throws SQLException {
-        try (Connection con = BDConnection.getConnection()) {
+        try(Connection con = BDConexion.getConexion();
             con.setAutoCommit(false);
             try {
                 if (doc.getIdUsuario() > 0) {
@@ -178,7 +178,7 @@ public class DocenteDao {
     // Borra el docente y luego su usuario.
     // Si tiene materias asignadas, MySQL lo impide y se hace rollback.
     public void eliminar(Docente doc) throws SQLException {
-        try (Connection con = BDConnection.getConnection()) {
+        try(Connection con = BDConexion.getConexion();
             con.setAutoCommit(false);
             try {
                 try (PreparedStatement ps = con.prepareStatement(

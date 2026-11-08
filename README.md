@@ -134,7 +134,8 @@ La base de datos local se llama `escuela`.
 - **Asignacion docente:** doc_materia_curso.
 - **Comunicaciones:** notificaciones y correo_envio.
 
-Los archivos completos estan en [DiagramaBaseDatos.md](DiagramaBaseDatos.md) y [DiagramClases.md](DiagramClases.md).
+Los archivos completos están en **[Diagrama de Clases ](./docs/diagrama-clases.md):** Estructura detallada del proyecto con sus respectivos métodos, atributos y relaciones.
+
 
 ## Requisitos previos
 
